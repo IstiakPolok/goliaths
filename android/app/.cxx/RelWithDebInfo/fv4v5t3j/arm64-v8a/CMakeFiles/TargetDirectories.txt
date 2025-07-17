@@ -1,0 +1,2 @@
+D:/2025_flutter/04_24_gflexx99/goliathsitled/android/app/.cxx/RelWithDebInfo/fv4v5t3j/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/2025_flutter/04_24_gflexx99/goliathsitled/android/app/.cxx/RelWithDebInfo/fv4v5t3j/arm64-v8a/CMakeFiles/rebuild_cache.dir
