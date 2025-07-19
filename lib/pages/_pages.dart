@@ -11,10 +11,16 @@ import 'package:get/get.dart';
 import 'package:goliaths/components/_components.dart';
 import 'package:goliaths/model/_models.dart';
 import 'package:goliaths/pages/authentication/controllers/register_controller.dart';
+import 'package:goliaths/pages/onboard/controllers/ai_type_controller.dart';
+import 'package:goliaths/pages/onboard/controllers/dob_controller.dart';
+import 'package:goliaths/pages/settings/controllers/ProfileController.dart';
+import 'package:goliaths/pages/settings/controllers/birthdate_controller.dart';
 import 'package:goliaths/routes.dart';
 import 'package:goliaths/theme.dart';
 import 'package:lunary/lunary.dart';
 import '../data/_data.dart';
+import 'authentication/controllers/VerifyOtpController.dart';
+import 'authentication/controllers/login_controller.dart';
 
 /* authentication - screens ============================================================*/
 part './authentication/screen_auth_entry.dart';
@@ -23,6 +29,7 @@ part './authentication/screen_register.dart';
 part './authentication/screen_create_password.dart';
 part './authentication/screen_verify_email.dart';
 part './authentication/screen_verify_otp.dart';
+part './authentication/screen_reset_verify_otp.dart';
 part './authentication/screen_password_change_success.dart';
 
 /* home - screens ============================================================*/

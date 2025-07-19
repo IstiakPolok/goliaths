@@ -8,6 +8,7 @@ class ScreenLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
     return AuthScaffold(
       body: Padding(
         padding: EdgeInsets.all(16.r),
@@ -70,12 +71,16 @@ class ScreenLogin extends StatelessWidget {
             Column(
               children: [
                 36.verticalSpace,
-                CustomInputField(hintText: "Email"),
+                CustomInputField(
+                  hintText: "Email",
+                  controller: controller.emailController,
+                ),
                 12.verticalSpace,
                 CustomInputField(
                   hintText: "Password",
                   isPassword: true,
                   action: TextInputAction.done,
+                  controller: controller.passwordController,
                 ),
                 12.verticalSpace,
                 Row(
@@ -101,13 +106,13 @@ class ScreenLogin extends StatelessWidget {
               ],
             ),
             // Submit/Login Button =============================================
-            CustomElevatedButton(
+            Obx(() => CustomElevatedButton(
               text: "Login",
-              onPressed: () {
-                Get.toNamed(AppRoutes.onboard);
-              },
+              onPressed: controller.loginUser,
               isFullWidth: true,
-            ),
+              isLoading: controller.isLoading.value,
+            )),
+
             Column(
               children: [
                 24.verticalSpace,

@@ -4,7 +4,9 @@ part of '../_pages.dart';
 /// Screen for birthdate tracker
 /// ****************************************************************************
 class ScreenBirthdate extends StatelessWidget {
-  const ScreenBirthdate({super.key});
+  final BirthdateController controller = Get.put(BirthdateController());
+
+  ScreenBirthdate({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,66 +14,79 @@ class ScreenBirthdate extends StatelessWidget {
       appBar: ChildPageAppBar(title: "Birthdate"),
       body: SafeArea(
         top: false,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.r),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Hey Susan!",
-                    style: goliathsTypography.screenTitle.copyWith(
-                      color: goliathsTheme.accent,
-                      fontSize: 22.sp,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.all(16.r),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Hey ${controller.firstName.value}!",
+                      style: goliathsTypography.screenTitle.copyWith(
+                        color: goliathsTheme.accent,
+                        fontSize: 22.sp,
+                      ),
                     ),
+                    CustomButtonSmall(
+                      text: "Add Birthday",
+                      onPressed: _showFriendAddBirth,
+                    ),
+                  ],
+                ),
+                24.verticalSpace,
+                Center(
+                  child: ProgressCircle(
+                    days: controller.remainingDays.value,
+                    progress: (30 - controller.remainingDays.value) / 30,
                   ),
-                  CustomButtonSmall(text: "Add Birthday", onPressed: _showFriendAddBirth),
-                ],
-              ),
-              24.verticalSpace,
-              Center(child: ProgressCircle(days: 8, progress: 0.75)),
-              24.verticalSpace,
-              Text(
-                "Your Birthday Remains 8 days",
-                style: goliathsTypography.screenTitle.copyWith(
-                  color: goliathsTheme.text,
-                  fontSize: 26.sp,
                 ),
-              ),
-              Text(
-                "The best is yet to come. Keep shining, keep dreaming, and keep moving forward. You’re not just a year older—you’re a year better.",
-                style: goliathsTypography.screenText.copyWith(
-                  color: goliathsTheme.text,
+                24.verticalSpace,
+                Text(
+                  "Your Birthday Remains ${controller.remainingDays.value} days",
+                  style: goliathsTypography.screenTitle.copyWith(
+                    color: goliathsTheme.text,
+                    fontSize: 26.sp,
+                  ),
                 ),
-              ),
-              24.verticalSpace,
-              _cardView(
-                title: "Birthday Reminders",
-                description: "Get notified about upcoming\nbirthdays",
-                icon: SvgAssetLoader("assets/icons/calendar_large.svg"),
-                onClick: () {
-                  Get.toNamed(AppRoutes.friendsBirth);
-                },
-              ),
-              12.verticalSpace,
-              _cardView(
-                title: "Wish suggestion",
-                description: "Discover ideas for gift and\nmessage",
-                icon: SvgAssetLoader("assets/icons/gift_large.svg"),
-                onClick: () {
-                  Get.toNamed(AppRoutes.birthWish);
-                },
-              ),
-            ],
-          ),
-        ),
+                Text(
+                  "The best is yet to come. Keep shining, keep dreaming, and keep moving forward. You’re not just a year older—you’re a year better.",
+                  style: goliathsTypography.screenText.copyWith(
+                    color: goliathsTheme.text,
+                  ),
+                ),
+                24.verticalSpace,
+                _cardView(
+                  title: "Birthday Reminders",
+                  description: "Get notified about upcoming\nbirthdays",
+                  icon: SvgAssetLoader("assets/icons/calendar_large.svg"),
+                  onClick: () {
+                    Get.toNamed(AppRoutes.friendsBirth);
+                  },
+                ),
+                12.verticalSpace,
+                _cardView(
+                  title: "Wish suggestion",
+                  description: "Discover ideas for gift and\nmessage",
+                  icon: SvgAssetLoader("assets/icons/gift_large.svg"),
+                  onClick: () {
+                    Get.toNamed(AppRoutes.birthWish);
+                  },
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 
-  void _showFriendAddBirth(){
+  void _showFriendAddBirth() {
     Get.dialog(const ModalFriendBirthDate());
   }
 
