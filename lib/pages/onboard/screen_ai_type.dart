@@ -4,7 +4,8 @@ part of '../_pages.dart';
 /// Screen for choose ai type
 /// ****************************************************************************
 class ScreenAiType extends StatelessWidget {
-  const ScreenAiType({super.key});
+  ScreenAiType({super.key});
+  final AiTypeController controller = Get.put(AiTypeController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,7 @@ class ScreenAiType extends StatelessWidget {
                 height: 68,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ThreeDotSvg()
-                  ],
+                  children: [ThreeDotSvg()],
                 ),
               ),
               Expanded(
@@ -32,11 +31,11 @@ class ScreenAiType extends StatelessWidget {
                     Text(
                       "Choose Your AI\nAssistant as",
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
-                          fontFamily: "Poly"
+                        color: Colors.white,
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                        fontFamily: "Poly",
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -45,19 +44,21 @@ class ScreenAiType extends StatelessWidget {
                     CustomElevatedButton(
                       text: "Friend",
                       onPressed: () {
+                        controller.selectMode("friend");
                         Get.toNamed(AppRoutes.country);
                       },
                       isFullWidth: true,
                     ),
                     12.verticalSpace,
-                    // Coach Button  ====================================================
                     CustomElevatedButton(
                       text: "Coach",
                       onPressed: () {
+                        controller.selectMode("coach");
                         Get.toNamed(AppRoutes.country);
                       },
                       isFullWidth: true,
                     ),
+
                     Spacer(),
                   ],
                 ),

@@ -84,13 +84,13 @@ class InputOtpFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OtpTextField(
-      contentPadding: EdgeInsets.symmetric(vertical: 20.h),
-      fieldWidth: 0.15.sw,
+      contentPadding: EdgeInsets.symmetric(vertical: 16.h),
+      fieldWidth: 0.12.sw,
       showFieldAsBox: true,
-      numberOfFields: 4,
+      numberOfFields: 6,
       filled: true,
       fillColor: goliathsTheme.inputBackground,
-      margin: EdgeInsets.symmetric(horizontal: 6.w),
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
       textStyle: goliathsTypography.screenTitle,
       decoration: InputDecoration(
         border: InputBorder.none,

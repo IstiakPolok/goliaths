@@ -29,6 +29,7 @@ dependencies:
   flutter_otp_text_field: ^1.5.1+1
   awesome_calendart: ^1.2.1
   http:
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

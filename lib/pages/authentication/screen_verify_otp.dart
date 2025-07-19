@@ -8,6 +8,7 @@ class ScreenVerifyOtp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(VerifyOtpController());
     return AuthScaffold(
       appBar: ChildPageAppBar(
         background: Colors.transparent,
@@ -43,15 +44,18 @@ class ScreenVerifyOtp extends StatelessWidget {
             Column(
               children: [
                 36.verticalSpace,
-                InputOtpFields(onOtpChange: (otp) {}),
+                InputOtpFields( onOtpChange: (value) {
+                  controller.otpController.text = value;
+                },),
                 12.verticalSpace,
-                CustomElevatedButton(
+                Obx(() => CustomElevatedButton(
                   text: "Submit",
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.createPass);
-                  },
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () => controller.submitOtp(),
                   isFullWidth: true,
-                ),
+                  isLoading: controller.isLoading.value,
+                )),
               ],
             ),
             Container(),
