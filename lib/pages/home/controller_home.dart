@@ -4,63 +4,157 @@ part of '../_pages.dart';
 /// Controller for home section
 /// ****************************************************************************
 class ControllerHome extends GetxController {
-  RxList<ChatMessage> chatMessages =
-      [
-        // First message from the user (top)
-        ChatMessage(
-          text:
-              "Hey, I recently read a book called 'Breaking Goliath'. Have you heard of it?",
-          role: ChatRole.user,
-          chatPosition: ChatPosition.single,
-        ),
-        // AI response (middle)
-        ChatMessage(
-          text:
-              "Yes, it's an inspiring book about overcoming giants and challenges. What did you think about it?",
-          role: ChatRole.ai,
-          chatPosition: ChatPosition.single,
-        ),
-        // Next message from the user (middle)
-        ChatMessage(
-          text:
-              "I really liked how it used the metaphor of 'Goliath' to represent big obstacles. It made me think about my own struggles.",
-          role: ChatRole.user,
-          chatPosition: ChatPosition.single,
-        ),
-        // AI response (middle)
-        ChatMessage(
-          text:
-              "Exactly! The story of David and Goliath is so powerful, especially when it’s applied to personal challenges.",
-          role: ChatRole.ai,
-          chatPosition: ChatPosition.single,
-        ),
-        // Next message from the user (bottom)
-        ChatMessage(
-          text:
-              "The author really emphasizes that even the smallest person can overcome the biggest of obstacles.",
-          role: ChatRole.user,
-          chatPosition: ChatPosition.top,
-        ),
-        // Next message from the user (bottom)
-        ChatMessage(
-          text: "It's motivational.",
-          role: ChatRole.user,
-          chatPosition: ChatPosition.middle,
-        ),
-        // Next message from the user (bottom)
-        ChatMessage(
-          text: "Definitely?",
-          role: ChatRole.user,
-          chatPosition: ChatPosition.bottom,
-        ),
-        // Final AI response (bottom)
-        ChatMessage(
-          text:
-              "Definitely. It's a reminder that courage and perseverance can take us farther than we think. Do you feel more motivated?",
-          role: ChatRole.ai,
-          chatPosition: ChatPosition.single,
-        ),
-      ].obs;
+  RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
+
+  Future<void> loadChatMessages(int chatId) async {
+    try {
+      final token = await SharedPreferencesHelper.getAccessToken();
+
+      if (kDebugMode) {
+        print("📌 Access Token: $token");
+      }
+
+      final response = await http.get(
+        Uri.parse("${Urls.baseUrl}/conversations/$chatId/messages/"),
+
+        headers: {
+          "Authorization": "JWT $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+
+        chatMessages.value =
+            data.map((item) {
+              return ChatMessage(
+                text: item["content"] ?? "",
+                role: item["role"] == "user" ? ChatRole.user : ChatRole.ai,
+                chatPosition: ChatPosition.single,
+              );
+            }).toList();
+      } else {
+        if (kDebugMode) {
+          print(
+            "❌ Failed to load messages: ${response.statusCode} ${response.body}",
+          );
+        }
+        Get.snackbar("Error", "Failed to load chat messages");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("🔥 Exception occurred: $e");
+      }
+      Get.snackbar("Error", "Something went wrong");
+    }
+  }
+
+  //   Future<void> sendMessageToChat(int chatId, String userMessage) async {
+  //   try {
+  //     // 1. Immediately show the user message
+  //     chatMessages.add(
+  //       ChatMessage(
+  //         text: userMessage,
+  //         role: ChatRole.user,
+  //         chatPosition: ChatPosition.single,
+  //       ),
+  //     );
+
+  //     final token = await SharedPreferencesHelper.getAccessToken();
+  //     final url = Uri.parse(
+  //       "${Urls.baseUrl}/conversations/$chatId/send_message/",
+  //     );
+
+  //     final response = await http.post(
+  //       url,
+  //       headers: {
+  //         "Authorization": "JWT $token",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: jsonEncode({"title": userMessage}),
+  //     );
+
+  //     if (kDebugMode) {
+  //       print("✅ Sent: $userMessage");
+  //       print("🧠 API Response: ${response.body}");
+  //     }
+
+  //     if (response.statusCode == 200) {
+  //       // Optional: add AI response right away
+  //       final data = jsonDecode(response.body);
+
+  //       chatMessages.add(
+  //         ChatMessage(
+  //           text: data["AI"] ?? "No response",
+  //           role: ChatRole.ai,
+  //           chatPosition: ChatPosition.single,
+  //         ),
+  //       );
+
+  //       // Wait for 2 seconds, then refresh from server
+  //       await Future.delayed(const Duration(seconds: 1));
+  //       await loadChatMessages(chatId);
+  //     } else {
+  //       Get.snackbar("Error", "Message failed to send.");
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print("❌ sendMessage error: $e");
+  //     }
+  //     Get.snackbar("Error", "Something went wrong.");
+  //   }
+  // }
+
+  Future<void> sendMessageToChat(int chatId, String userMessage) async {
+    try {
+      final token = await SharedPreferencesHelper.getAccessToken();
+      final url = Uri.parse(
+        "${Urls.baseUrl}/conversations/$chatId/send_message/",
+      );
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": "JWT $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"title": userMessage}),
+      );
+
+      if (kDebugMode) {
+        print("✅ Message sent: $userMessage");
+        print("🧠 Response: ${response.body}");
+      }
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        chatMessages.add(
+          ChatMessage(
+            text: data["User"] ?? userMessage,
+            role: ChatRole.user,
+            chatPosition: ChatPosition.single,
+          ),
+        );
+
+        chatMessages.add(
+          ChatMessage(
+            text: data["AI"] ?? "No response",
+            role: ChatRole.ai,
+            chatPosition: ChatPosition.single,
+          ),
+        );
+      } else {
+        Get.snackbar("Error", "Message failed to send.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("❌ sendMessage error: $e");
+      }
+      Get.snackbar("Error", "Something went wrong.");
+    }
+  }
 }
 
 class ChatMessage {

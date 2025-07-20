@@ -63,7 +63,7 @@ class ScreenSettings extends StatelessWidget {
               icon: SvgAssetLoader("assets/icons/logout.svg"),
               title: "Logout",
               onTap: () {
-                Get.offAllNamed(AppRoutes.login);
+                SharedPreferencesHelper.logoutUser();
               },
             ),
           ],

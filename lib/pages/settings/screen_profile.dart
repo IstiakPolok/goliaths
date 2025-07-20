@@ -31,12 +31,12 @@ class ScreenProfile extends StatelessWidget {
 
               // profile image
               AvatarUploader(
-                initialImageUrl: profile.avatarUrl,
-                onImagePicked: (file) {
-                  print('Picked image path: ${file.path}');
-                  // Add image upload logic
+                initialImageUrl: profile.profilePicture,
+                onImagePicked: (file) async {
+                  await uploadProfilePicture(file);
                 },
               ),
+
               36.verticalSpace,
 
               // personal info
@@ -54,7 +54,7 @@ class ScreenProfile extends StatelessWidget {
                       _divider(),
                       _infoRow('Email', profile.email),
                       _divider(),
-                      _infoRow('Gender', profile.lastName),
+                      _infoRow('Gender', 'Male'),
                       _divider(),
 
                       // date of birth
