@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:goliaths/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pages/_pages.dart';
-
-
 
 class SharedPreferencesHelper {
   static const String _accessTokenKey = 'token';
@@ -16,8 +15,8 @@ class SharedPreferencesHelper {
 
   // Save categories (id and name only)
   static Future<void> saveCategories(
-      List<Map<String, String>> categories,
-      ) async {
+    List<Map<String, String>> categories,
+  ) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final categoriesJson = jsonEncode(categories);
     await prefs.setString(_categoriesKey, categoriesJson);
@@ -96,7 +95,7 @@ class SharedPreferencesHelper {
 
   static Future<void> logoutUser() async {
     await clearAllData();
-    Get.offAll(() => ScreenLogin());
+    Get.offAllNamed(AppRoutes.login);
   }
 
   static const String _userIdKey = 'userId';

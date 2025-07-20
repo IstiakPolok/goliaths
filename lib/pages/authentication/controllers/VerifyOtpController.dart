@@ -35,10 +35,7 @@ class VerifyOtpController extends GetxController {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "email": email,
-          "otp": otp,
-        }),
+        body: jsonEncode({"email": email, "otp": otp}),
       );
 
       print("✅ Response Code: ${response.statusCode}");
@@ -48,7 +45,7 @@ class VerifyOtpController extends GetxController {
 
       if (response.statusCode == 200) {
         Get.snackbar("Success", data["message"] ?? "Account verified");
-        Get.toNamed(AppRoutes.createPass);
+        Get.toNamed(AppRoutes.login);
       } else {
         Get.snackbar("Failed", data["message"] ?? "Invalid OTP or email");
       }

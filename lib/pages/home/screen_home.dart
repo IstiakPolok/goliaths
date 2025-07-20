@@ -3,18 +3,37 @@ part of '../_pages.dart';
 /// ****************************************************************************
 /// Home Screen (Home Section Entry)
 /// ****************************************************************************
-class ScreenHome extends StatelessWidget {
+class ScreenHome extends StatefulWidget {
   const ScreenHome({super.key});
 
   @override
+  State<ScreenHome> createState() => _ScreenHomeState();
+}
+
+class _ScreenHomeState extends State<ScreenHome> {
+  @override
+  void initState() {
+    super.initState();
+    _handleIncomingLinks();
+  }
+
+  void _handleIncomingLinks() {
+    uriLinkStream.listen((Uri? uri) {
+      if (uri != null && uri.toString().contains('donation-success')) {
+        Get.off(() => ScreenDonationComplete());
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
+    final historyController = Get.put(ControllerHistory());
     final cardDecoration = BoxDecoration(
       color: Color(0xFF222222),
       borderRadius: BorderRadius.circular(26.r),
     );
 
     return Scaffold(
-      appBar: HomeAppBar(title: "Good Morning, Susan", isButton: false,),
+      appBar: HomeAppBar(title: "Good Morning, Susan", isButton: false),
       bottomNavigationBar: BottomBar(selectedIndex: 0),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
@@ -217,7 +236,7 @@ class ScreenHome extends StatelessWidget {
                   textAlign: TextAlign.start,
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Get.toNamed(AppRoutes.chatHistory);
                   },
                   child: Text(
@@ -232,19 +251,38 @@ class ScreenHome extends StatelessWidget {
               ],
             ),
             12.verticalSpace,
-            // History Item
-            ...[
-              "How to Stay Focused?",
-              "Felt more confident at work today!",
-              "How to quit smoking?!",
-            ].mapIndexed(
-              (index, value) => HistoryItem(
-                key: ValueKey(index),
-                title: value,
-                icon: SvgAssetLoader("assets/icons/history_${index + 1}.svg"),
-                onClick: ()=> Get.toNamed(AppRoutes.chat),
-              ),
-            ),
+            Obx(() {
+              final items = historyController.historyList.take(3).toList();
+              if (items.isEmpty) {
+                return const Text("No history yet.");
+              }
+
+              return Column(
+                children:
+                    items.mapIndexed((index, item) {
+                      final title =
+                          item.title?.isNotEmpty == true
+                              ? item.title!
+                              : item.mode?.isNotEmpty == true
+                              ? item.mode!
+                              : "Untitled";
+
+                      return HistoryItem(
+                        key: ValueKey(item.id),
+                        title: title,
+                        icon: SvgAssetLoader(
+                          "assets/icons/history_${(index % 2) + 1}.svg",
+                        ),
+                        onClick:
+                            () => Get.toNamed(
+                              AppRoutes.chat,
+                              arguments: {'id': item.id, 'title': title},
+                            ),
+                      );
+                    }).toList(),
+              );
+            }),
+
             16.verticalSpace,
           ],
         ),

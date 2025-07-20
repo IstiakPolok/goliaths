@@ -1,61 +1,67 @@
 part of '../_pages.dart';
 
+class BirthdayItem {
+  final String name;
+  final String birthday;
+  final String image;
+
+  const BirthdayItem({
+    required this.name,
+    required this.birthday,
+    required this.image,
+  });
+
+  DateTime get parsedDate => DateTime.tryParse(birthday) ?? DateTime(1900);
+}
+
 class ControllerBirthDay extends GetxController {
   final todays = RxList<BirthdayItem>([]);
   final upcomings = RxList<BirthdayItem>([]);
 
-  final sectionsDummy = const [
-    BirthdayItem(
-      name: 'Susan Zannat',
-      birthday: '4/15/2026',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'Mark Taylor',
-      birthday: '4/29/2027',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'Mark Butcher',
-      birthday: '4/29/2027',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'Tushfiqur Bahim',
-      birthday: '4/29/2027',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'Mashrafi Bin Tortoja',
-      birthday: '4/29/2027',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'Alice Cooper',
-      birthday: '5/5/2028',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'John Doe',
-      birthday: '12/12/2025',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'Susan Zannat',
-      birthday: '1/30/2027',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-    BirthdayItem(
-      name: 'Jane Smith',
-      birthday: '6/18/2026',
-      image: 'https://avatar.iran.liara.run/public',
-    ),
-  ];
-
   @override
   void onInit() {
     super.onInit();
-    groupBirthDayList(sectionsDummy);
+    fetchFriendsBirthdays();
+  }
+
+  Future<void> fetchFriendsBirthdays() async {
+    try {
+      final token = await SharedPreferencesHelper.getAccessToken();
+      print("🔐 Access Token: $token");
+
+      final response = await http.get(
+        Uri.parse("${Urls.baseUrl}/friends/"),
+        headers: {
+          "Authorization": "JWT $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      print("🌐 API Status: ${response.statusCode}");
+      print("📦 Raw Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        print("✅ Parsed Data Count: ${data.length}");
+
+        final List<BirthdayItem> friends =
+            data.map((item) {
+              final name = item['name'] ?? '';
+              final birthday = item['birthday'] ?? '';
+              final image = 'https://avatar.iran.liara.run/public';
+              print("👤 Friend: $name | Birthday: $birthday");
+              return BirthdayItem(name: name, birthday: birthday, image: image);
+            }).toList();
+
+        groupBirthDayList(friends);
+      } else {
+        Get.snackbar("Error", "Failed to fetch friends");
+        print("❌ Error: ${response.statusCode} ${response.body}");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong.");
+      print("🔥 Exception: $e");
+    }
   }
 
   void groupBirthDayList(List<BirthdayItem> allBirthdays) {
@@ -79,7 +85,8 @@ class ControllerBirthDay extends GetxController {
         }
       }
     }
-    if (birthdaysToday.isNotEmpty) todays.value = birthdaysToday;
-    if (upcomingBirthdays.isNotEmpty) upcomings.value = upcomingBirthdays;
+
+    todays.assignAll(birthdaysToday);
+    upcomings.assignAll(upcomingBirthdays);
   }
 }

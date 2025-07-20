@@ -78,21 +78,46 @@ class ScreenDonationHome extends GetView<ControllerDonation> {
                 ],
               ),
             ),
+            Obx(() {
+              return SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final donation = controller.donations[index];
+                  return ListTile(
+                    leading: Icon(Icons.card_giftcard),
+                    title: Text(donation.donorName ?? 'Anonymous'),
+                    subtitle: Text(
+                      "${donation.amount} ${donation.currency} - ${donation.status}",
+                    ),
+                    trailing: Text(donation.donatedAt.split('T').first),
+                  );
+                }, childCount: controller.donations.length),
+              );
+            }),
+
             Obx(
               () => SliverPaddingListView(
                 padding: _padding,
-                itemCount: controller.donationSummaries.length,
+                itemCount: controller.donations.length,
                 itemBuilder: (context, index) {
                   return _fundRaiseCard(
                     image: controller.donationSummaries[index].image,
-                    name: controller.donationSummaries[index].name,
-                    fundRaised:
-                        controller.donationSummaries[index].fundraisedAmount,
+                    name: controller.donations[index].message,
+                    fundRaised: controller.donations[index].amount,
                     onClick: () {
-                      Get.toNamed(AppRoutes.donationDetail);
+                      final id = controller.donations[index].id;
+                      print('Donation ID: $id');
+                      Get.toNamed(
+                        AppRoutes.donationDetail,
+                        arguments: {'donationId': id},
+                      );
                     },
                     onClickDonateButton: () {
-                      Get.toNamed(AppRoutes.donationAmount);
+                      final id = controller.donations[index].id;
+                      print('campaign_id: $id');
+                      Get.toNamed(
+                        AppRoutes.donationAmount,
+                        arguments: {'campaign_id': id},
+                      );
                     },
                   );
                 },
@@ -130,7 +155,7 @@ class ScreenDonationHome extends GetView<ControllerDonation> {
               ),
             ),
             Text(
-              "\$43423",
+              "\$ ${controller.totalDonated.value}",
               textAlign: TextAlign.start,
               style: goliathsTypography.screenHeading.copyWith(
                 color: goliathsTheme.accent,

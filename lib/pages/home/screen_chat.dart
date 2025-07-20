@@ -8,8 +8,19 @@ class ScreenChat extends GetView<ControllerHome> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = Get.arguments ?? {};
+    final int? chatId = arguments['id'];
+    final String chatTitle = arguments['title'] ?? "Ai Coach";
+
+    // Call API when the widget builds
+    if (chatId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.loadChatMessages(chatId);
+      });
+    }
+
     return Scaffold(
-      appBar: ChildPageAppBar(title: "Ai Coach"),
+      appBar: ChildPageAppBar(title: chatTitle),
       body: SafeArea(
         top: false,
         child: Column(
@@ -27,13 +38,17 @@ class ScreenChat extends GetView<ControllerHome> {
                       chatPosition: item.chatPosition,
                     );
                   },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return 8.verticalSpace;
-                  },
+                  separatorBuilder: (_, __) => 8.verticalSpace,
                 ),
               ),
             ),
-            ChatInputBox(onSendMessage: (_) {}),
+            ChatInputBox(
+              onSendMessage: (message) async {
+                if (chatId != null) {
+                  await controller.sendMessageToChat(chatId, message);
+                }
+              },
+            ),
           ],
         ),
       ),

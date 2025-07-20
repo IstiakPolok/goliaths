@@ -45,7 +45,8 @@ class AppRoutes extends StatelessWidget {
       name: splash,
       page: () => ScreenSplash(),
       transition: Transition.rightToLeft,
-    ),    GetPage(
+    ),
+    GetPage(
       name: onboard,
       page: () => ScreenAvatarList(),
       binding: _provide(ControllerOnboard(), true),
@@ -75,7 +76,6 @@ class AppRoutes extends StatelessWidget {
       binding: _provide(ControllerOnboard(), true),
       transition: Transition.rightToLeft,
     ),
-
 
     GetPage(
       name: auth,
@@ -186,8 +186,11 @@ class AppRoutes extends StatelessWidget {
       transition: Transition.rightToLeft,
       binding: _provide(ControllerBirthDay()),
     ),
-    GetPage(name: birthWish, page: () => ScreenBirthdayWish(),
-      transition: Transition.rightToLeft,),
+    GetPage(
+      name: birthWish,
+      page: () => ScreenBirthdayWish(),
+      transition: Transition.rightToLeft,
+    ),
     GetPage(
       name: donationHome,
       page: () => ScreenDonationHome(),
@@ -208,6 +211,7 @@ class AppRoutes extends StatelessWidget {
     ),
     GetPage(
       name: donationSuccess,
+
       page: () => ScreenDonationComplete(),
       transition: Transition.rightToLeft,
       // binding: _provide(ControllerDonation()),

@@ -4,7 +4,9 @@ part of '../_pages.dart';
 /// Donation and organization amount entry
 /// ****************************************************************************
 class ScreenDonationAmount extends GetView<ControllerDonation> {
-  const ScreenDonationAmount({super.key});
+  ScreenDonationAmount({super.key});
+
+  final campaign_id = Get.arguments['campaign_id'];
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,23 @@ class ScreenDonationAmount extends GetView<ControllerDonation> {
                   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Orci nulla sagittis proin faucibus tincidunt...',
               commentsCount: 58,
               onDonatePressed: () {
-                Get.toNamed(AppRoutes.donationSuccess);
+                final selectedAmount = controller.selectedAmount.value;
+
+                if (selectedAmount <= 0) {
+                  Get.snackbar(
+                    "Error",
+                    "Please enter or select a valid amount",
+                  );
+                  return;
+                }
+
+                controller.createCheckoutSession(
+                  amount: selectedAmount.toString(),
+                  campaign_id: campaign_id, // 👈 passed from previous screen
+                  donorName: "Anonymous", // Default
+                  donorEmail: "anonymous@example.com", // Default
+                  message: "Thank you for your donation!", // Default
+                );
               },
             ),
           ],

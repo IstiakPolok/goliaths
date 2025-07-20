@@ -79,7 +79,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.h),
-                  child: Text("Breaking Goliaths", style: goliathsTypography.screenText),
+                  child: Text(
+                    "Breaking Goliaths",
+                    style: goliathsTypography.screenText,
+                  ),
                 ),
                 if (widget.isButton)
                   CustomButtonSmall(
@@ -251,8 +254,8 @@ class _BottomBarItem extends StatelessWidget {
           children: [
             SvgPicture(
               icon,
-              height: 22.h,
-              width: 22.h,
+              height: 20.h,
+              width: 20.h,
               colorFilter: ColorFilter.mode(
                 selected ? goliathsTheme.accent : goliathsTheme.barIcon,
                 BlendMode.srcIn,
@@ -262,7 +265,7 @@ class _BottomBarItem extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: 11.sp,
                 fontFamily: "Poppins",
                 color: selected ? goliathsTheme.accent : goliathsTheme.barIcon,
                 fontWeight: FontWeight.normal,

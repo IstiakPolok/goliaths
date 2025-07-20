@@ -198,30 +198,28 @@ class ChatItemView extends StatelessWidget {
 /// ****************************************************************************
 /// Chat Box Chat Page
 /// ****************************************************************************
-class ChatInputBox extends StatelessWidget {
+class ChatInputBox extends StatefulWidget {
   final Function(String) onSendMessage;
   final double gap;
 
   const ChatInputBox({super.key, required this.onSendMessage, this.gap = 8});
 
-  Widget _iconButton({required SvgAssetLoader icon, required Color color}) {
-    return Container(
-      height: 36.h,
-      width: 36.h,
-      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-      child: Center(child: SvgPicture(icon, height: 20.h, width: 20.h)),
-    );
-  }
+  @override
+  State<ChatInputBox> createState() => _ChatInputBoxState();
+}
+
+class _ChatInputBoxState extends State<ChatInputBox> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(gap),
+      padding: EdgeInsets.all(widget.gap),
       child: Row(
         children: [
-          // Input field
           Expanded(
             child: TextField(
+              controller: _controller,
               decoration: InputDecoration(
                 hintText: "Ask me anything",
                 border: OutlineInputBorder(
@@ -237,11 +235,11 @@ class ChatInputBox extends StatelessWidget {
                   borderSide: BorderSide(color: goliathsTheme.stroke),
                 ),
               ),
-              textInputAction: TextInputAction.newline,
               style: goliathsTypography.screenText,
             ),
           ),
-          SizedBox(width: gap),
+          SizedBox(width: widget.gap),
+
           // Voice Button
           InkWell(
             splashColor: goliathsTheme.primary.withValues(alpha: 0.05),
@@ -251,11 +249,15 @@ class ChatInputBox extends StatelessWidget {
               color: goliathsTheme.primary,
             ),
           ),
-          SizedBox(width: gap),
-          // Send Button
+          SizedBox(width: widget.gap),
           InkWell(
-            splashColor: goliathsTheme.accent.withValues(alpha: 0.1),
-            onTap: () {},
+            onTap: () {
+              final message = _controller.text.trim();
+              if (message.isNotEmpty) {
+                widget.onSendMessage(message);
+                _controller.clear();
+              }
+            },
             child: _iconButton(
               icon: SvgAssetLoader("assets/icons/send.svg"),
               color: goliathsTheme.accent,
@@ -263,6 +265,15 @@ class ChatInputBox extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _iconButton({required SvgAssetLoader icon, required Color color}) {
+    return Container(
+      height: 36.h,
+      width: 36.h,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      child: Center(child: SvgPicture(icon, height: 20.h, width: 20.h)),
     );
   }
 }
@@ -330,7 +341,7 @@ class ThreeDotSvg extends StatelessWidget {
 /// Avatar picker
 /// ****************************************************************************
 class AvatarUploader extends StatefulWidget {
-  final String? initialImageUrl; // optional initial avatar
+  final String? initialImageUrl;
   final void Function(File pickedFile) onImagePicked;
 
   const AvatarUploader({
@@ -364,12 +375,12 @@ class _AvatarUploaderState extends State<AvatarUploader> {
       children: [
         CircleAvatar(
           radius: 60.r,
-          backgroundColor: goliathsTheme.stroke,
+          backgroundColor: Colors.grey[300],
           backgroundImage:
               _selectedImage != null
                   ? FileImage(_selectedImage!)
                   : (widget.initialImageUrl != null
-                      ? NetworkImage(widget.initialImageUrl!) as ImageProvider
+                      ? NetworkImage(widget.initialImageUrl!)
                       : null),
           child:
               (_selectedImage == null && widget.initialImageUrl == null)
@@ -384,13 +395,16 @@ class _AvatarUploaderState extends State<AvatarUploader> {
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: goliathsTheme.primary,
+                color: Colors.amber,
                 border: Border.all(color: Colors.white, width: 2),
               ),
               padding: const EdgeInsets.all(6),
               child: SvgPicture.asset(
                 "assets/icons/edit_pen.svg",
-                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
+                ),
                 width: 18.r,
                 height: 18.r,
               ),
@@ -634,8 +648,7 @@ class ProgressCirclePainter extends CustomPainter {
     canvas.drawCircle(center, accentRadius, accentPaint);
 
     // Calculate the position of the small circle at the head of the progress
-    final progressAngle =
-        -math.pi / 2 + sweepAngle;
+    final progressAngle = -math.pi / 2 + sweepAngle;
     final smallCircleRadius = 8.0;
     final smallCircleCenter = Offset(
       center.dx + radius * math.cos(progressAngle),
