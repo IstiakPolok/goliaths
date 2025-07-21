@@ -51,23 +51,30 @@ class ScreenBirthdayWish extends StatelessWidget {
   }
 
   Widget _cardView({required String quote}) {
-    return Container(
-      padding: EdgeInsets.all(16.r),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.r),
-        color: goliathsTheme.background,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SvgPicture.asset(
-            "assets/icons/quote.svg",
-            colorFilter: ColorFilter.mode(goliathsTheme.text, BlendMode.srcIn),
-            height: 20.h,
-          ),
-          12.horizontalSpace,
-          Expanded(child: Text(quote, style: goliathsTypography.screenText)),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: quote));
+        // Optional: show feedback
+        Get.snackbar("Copied", "Quote copied to clipboard");
+      },
+      child: Container(
+        padding: EdgeInsets.all(16.r),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24.r),
+          color: goliathsTheme.background,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SvgPicture.asset(
+              "assets/icons/quote.svg",
+              colorFilter: ColorFilter.mode(goliathsTheme.text, BlendMode.srcIn),
+              height: 20.h,
+            ),
+            12.horizontalSpace,
+            Expanded(child: Text(quote, style: goliathsTypography.screenText)),
+          ],
+        ),
       ),
     );
   }

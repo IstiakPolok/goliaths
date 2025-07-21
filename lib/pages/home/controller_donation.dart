@@ -164,11 +164,8 @@ class ControllerDonation extends GetxController {
         final checkoutUrl = responseData["checkout_url"];
 
         if (checkoutUrl != null && checkoutUrl.toString().isNotEmpty) {
-          // Open checkout URL
-          final launched = await launchUrlString(checkoutUrl);
-          if (!launched) {
-            Get.snackbar('Error', 'Could not launch checkout URL');
-          }
+          // ✅ Open the donation WebView page
+          Get.to(() => ScreenWebview(url: checkoutUrl));
         } else {
           Get.snackbar('Error', 'Checkout URL not found');
         }

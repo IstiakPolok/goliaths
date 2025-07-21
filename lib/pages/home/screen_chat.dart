@@ -10,7 +10,7 @@ class ScreenChat extends GetView<ControllerHome> {
   Widget build(BuildContext context) {
     final arguments = Get.arguments ?? {};
     final int? chatId = arguments['id'];
-    final String chatTitle = arguments['title'] ?? "Ai Coach";
+    final String chatTitle = arguments['title'] ?? "Ai";
 
     // Call API when the widget builds
     if (chatId != null) {

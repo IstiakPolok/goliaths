@@ -50,6 +50,48 @@ class ControllerHome extends GetxController {
     }
   }
 
+  var isLoading = false.obs;
+
+  Future<void> selectModeAndStartChat(String mode) async {
+    try {
+      isLoading.value = true;
+      final token = await SharedPreferencesHelper.getAccessToken();
+      final url = Uri.parse("${Urls.baseUrl}/conversations/select_mode/");
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": "JWT $token",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"mode": mode}),
+      );
+
+      if (kDebugMode) {
+        print("💬 select_mode response: ${response.body}");
+      }
+
+      if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        final int conversationId = data["conversation_id"];
+        final String title = mode.capitalizeFirst ?? "Ai";
+
+        // Navigate to chat screen with arguments
+        Get.toNamed(
+          AppRoutes.chat,
+          arguments: {"id": conversationId, "title": title},
+        );
+      } else {
+        Get.snackbar("Error", "Failed to start a new chat.");
+      }
+    } catch (e) {
+      if (kDebugMode) print("❌ select_mode error: $e");
+      Get.snackbar("Error", "Something went wrong.");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   //   Future<void> sendMessageToChat(int chatId, String userMessage) async {
   //   try {
   //     // 1. Immediately show the user message

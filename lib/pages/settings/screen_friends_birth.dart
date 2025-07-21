@@ -56,7 +56,7 @@ class ScreenFriendsBirth extends GetView<ControllerBirthDay> {
 
 class SearchBox extends StatelessWidget {
   final TextEditingController? controller;
-  const SearchBox({super.key,this.controller});
+  const SearchBox({super.key, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -158,10 +158,13 @@ class BirthdayItemWidget extends StatelessWidget {
             ),
           ),
           16.horizontalSpace,
-          SvgPicture.asset(
-            "assets/icons/whatsapp.svg",
-            height: 20.h,
-            width: 20.h,
+          GestureDetector(
+            onTap: () {},
+            child: SvgPicture.asset(
+              "assets/icons/whatsapp.svg",
+              height: 20.h,
+              width: 20.h,
+            ),
           ),
         ],
       ),

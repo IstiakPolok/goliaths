@@ -14,26 +14,23 @@ class _ScreenHomeState extends State<ScreenHome> {
   @override
   void initState() {
     super.initState();
-    _handleIncomingLinks();
-  }
-
-  void _handleIncomingLinks() {
-    uriLinkStream.listen((Uri? uri) {
-      if (uri != null && uri.toString().contains('donation-success')) {
-        Get.off(() => ScreenDonationComplete());
-      }
-    });
   }
 
   Widget build(BuildContext context) {
     final historyController = Get.put(ControllerHistory());
+    final controllerHome = Get.put(ControllerHome());
+    final profilecontroller = Get.put(ProfileController());
     final cardDecoration = BoxDecoration(
       color: Color(0xFF222222),
       borderRadius: BorderRadius.circular(26.r),
     );
 
     return Scaffold(
-      appBar: HomeAppBar(title: "Good Morning, Susan", isButton: false),
+      appBar: HomeAppBar(
+        title: "Good Morning, ${profilecontroller.profile.value?.name}",
+        isButton: false,
+      ),
+
       bottomNavigationBar: BottomBar(selectedIndex: 0),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
@@ -57,6 +54,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                   fit: BoxFit.cover,
                 ),
               ),
+
               child: Center(
                 child: Text(
                   "\"You don't have to be great to start, but you have to start to be great.\"\n– Zig Ziglar",
@@ -173,7 +171,10 @@ class _ScreenHomeState extends State<ScreenHome> {
                         // Right Bottom Card
                         Expanded(
                           child: GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.chat),
+                            onTap: () {
+                              controllerHome.selectModeAndStartChat("friend");
+                            },
+
                             child: Container(
                               padding: EdgeInsets.all(16.r),
                               decoration: cardDecoration.copyWith(
