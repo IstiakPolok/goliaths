@@ -1,7 +1,5 @@
 part of '../_pages.dart';
 
-
-
 /// ****************************************************************************
 /// Verify otp screen
 /// ****************************************************************************
@@ -10,7 +8,12 @@ class ScreenResetVerifyOtp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(VerifyOtpController());
+    final controller = Get.put(VerifyEmailController());
+
+    final String email = Get.arguments["email"];
+
+    controller.userEmail.value = email; // Pass it to controller if needed
+
     return AuthScaffold(
       appBar: ChildPageAppBar(
         background: Colors.transparent,
@@ -46,18 +49,23 @@ class ScreenResetVerifyOtp extends StatelessWidget {
             Column(
               children: [
                 36.verticalSpace,
-                InputOtpFields( onOtpChange: (value) {
-                  controller.otpController.text = value;
-                },),
+                InputOtpFields(
+                  onOtpChange: (value) {
+                    controller.otpController.text = value;
+                  },
+                ),
                 12.verticalSpace,
-                Obx(() => CustomElevatedButton(
-                  text: "Submit",
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : () => controller.submitOtp(),
-                  isFullWidth: true,
-                  isLoading: controller.isLoading.value,
-                )),
+                Obx(
+                  () => CustomElevatedButton(
+                    text: "Submit",
+                    onPressed:
+                        controller.isLoading.value
+                            ? null
+                            : () => controller.submitOtp(),
+                    isFullWidth: true,
+                    isLoading: controller.isLoading.value,
+                  ),
+                ),
               ],
             ),
             Container(),

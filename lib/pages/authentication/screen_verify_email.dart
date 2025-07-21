@@ -4,7 +4,8 @@ part of '../_pages.dart';
 /// Verify email screen
 /// ****************************************************************************
 class ScreenVerifyEmail extends StatelessWidget {
-  const ScreenVerifyEmail({super.key});
+  ScreenVerifyEmail({super.key});
+  final controller = Get.put(VerifyEmailController());
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +44,20 @@ class ScreenVerifyEmail extends StatelessWidget {
             Column(
               children: [
                 36.verticalSpace,
-                CustomInputField(hintText: "Email"),
+                CustomInputField(
+                  hintText: "Email",
+                  controller: controller.emailController,
+                ),
                 12.verticalSpace,
-                CustomElevatedButton(
-                  text: "Submit",
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.verifyOtp);
-                  },
-                  isFullWidth: true,
+                Obx(
+                  () => CustomElevatedButton(
+                    text: controller.isLoading.value ? "Sending..." : "Submit",
+                    onPressed:
+                        controller.isLoading.value
+                            ? null
+                            : controller.sendResetOtp,
+                    isFullWidth: true,
+                  ),
                 ),
               ],
             ),

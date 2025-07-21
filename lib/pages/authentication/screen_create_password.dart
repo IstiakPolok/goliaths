@@ -4,10 +4,13 @@ part of '../_pages.dart';
 /// Create/Reset password screen
 /// ****************************************************************************
 class ScreenCreatePassword extends StatelessWidget {
-  const ScreenCreatePassword({super.key});
+  final String email;
+  const ScreenCreatePassword({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CreatePasswordController());
+    controller.initEmail(email);
     return AuthScaffold(
       body: Padding(
         padding: EdgeInsets.all(16.r),
@@ -39,21 +42,26 @@ class ScreenCreatePassword extends StatelessWidget {
             Column(
               children: [
                 36.verticalSpace,
-                CustomInputField(hintText: "Password", isPassword: true),
+                CustomInputField(
+                  hintText: "Password",
+                  isPassword: true,
+                  controller: controller.passwordController,
+                ),
                 12.verticalSpace,
                 CustomInputField(
                   hintText: "Confirm Password",
                   isPassword: true,
+                  controller: controller.confirmPasswordController,
                   action: TextInputAction.done,
                 ),
                 12.verticalSpace,
-                CustomElevatedButton(
-                  text: "Submit",
-                  onPressed: () {
-                    Get.offAllNamed(AppRoutes.login);
-                  },
-                  isFullWidth: true,
-                ),
+                controller.isLoading.value
+                    ? const Center(child: CircularProgressIndicator())
+                    : CustomElevatedButton(
+                      text: "Submit",
+                      onPressed: controller.resetPassword,
+                      isFullWidth: true,
+                    ),
               ],
             ),
             Container(),

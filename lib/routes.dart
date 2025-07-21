@@ -21,6 +21,7 @@ class AppRoutes extends StatelessWidget {
   static const String createPass = "/createPass";
   static const String verifyEmail = "/verifyEmail";
   static const String verifyOtp = "/verifyOtp";
+  static const String screenResetVerifyOtp = "/screenResetVerifyOtp";
   static const String passChangeSuccess = "/passChangeSuccess";
   static const String home = "/home";
   static const String chat = "/chat";
@@ -97,7 +98,7 @@ class AppRoutes extends StatelessWidget {
     ),
     GetPage(
       name: createPass,
-      page: () => ScreenCreatePassword(),
+      page: () => ScreenCreatePassword(email: Get.arguments['email']),
       transition: Transition.rightToLeft,
       // binding: _provide(ControllerOnboard()),
     ),
@@ -110,6 +111,12 @@ class AppRoutes extends StatelessWidget {
     GetPage(
       name: verifyOtp,
       page: () => ScreenVerifyOtp(),
+      transition: Transition.rightToLeft,
+      // binding: _provide(ControllerOnboard()),
+    ),
+    GetPage(
+      name: screenResetVerifyOtp,
+      page: () => ScreenResetVerifyOtp(),
       transition: Transition.rightToLeft,
       // binding: _provide(ControllerOnboard()),
     ),
