@@ -119,7 +119,7 @@ class ChatItemView extends StatelessWidget {
           color: isUser ? goliathsTheme.chatBubble1 : goliathsTheme.chatBubble2,
           borderRadius: isUser ? _getUserBorderRadius() : _getAiBorderRadius(),
         ),
-        width: 0.8.sw,
+        //width: 0.8.sw,
         padding: EdgeInsets.all(16).w,
         child: Text(
           text,

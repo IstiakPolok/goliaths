@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:goliaths/network_caller/endpoints.dart';
+import 'package:goliaths/pages/_pages.dart';
 import 'package:goliaths/pages/settings/controllers/ProfileController.dart';
 import 'package:goliaths/routes.dart';
 import 'package:goliaths/services_class/shared_preferences_helper.dart';

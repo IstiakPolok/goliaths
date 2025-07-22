@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:math' as developer;
 
 import 'package:awesome_calendart/awesome_calendart.dart';
 import 'package:country_list/country_list.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,11 +24,13 @@ import 'package:goliaths/pages/onboard/controllers/ai_type_controller.dart';
 import 'package:goliaths/pages/onboard/controllers/dob_controller.dart';
 import 'package:goliaths/pages/settings/controllers/ProfileController.dart';
 import 'package:goliaths/pages/settings/controllers/birthdate_controller.dart';
+
 import 'package:goliaths/routes.dart';
 import 'package:goliaths/services_class/shared_preferences_helper.dart';
 import 'package:goliaths/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:lunary/lunary.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 

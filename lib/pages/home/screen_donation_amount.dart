@@ -6,12 +6,10 @@ part of '../_pages.dart';
 class ScreenDonationAmount extends GetView<ControllerDonation> {
   ScreenDonationAmount({super.key});
 
-  final campaign_id = Get.arguments['campaign_id'];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ChildPageAppBar(title: "Zozo foundation"),
+      appBar: ChildPageAppBar(title: "Goliaths foundation"),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -31,8 +29,8 @@ class ScreenDonationAmount extends GetView<ControllerDonation> {
             ),
             //  Content ========================================================
             donationCardSection(
-              title: 'Donate for the survival of kids in Africa',
-              organizationName: 'Zazu Foundation',
+              title: 'Donate for the survival ',
+              organizationName: 'Goliaths Foundation',
               donatorImages: [
                 'https://randomuser.me/api/portraits/men/1.jpg',
                 'https://randomuser.me/api/portraits/women/2.jpg',
@@ -58,7 +56,7 @@ class ScreenDonationAmount extends GetView<ControllerDonation> {
 
                 controller.createCheckoutSession(
                   amount: selectedAmount.toString(),
-                  campaign_id: campaign_id, // 👈 passed from previous screen
+                  campaign_id: 2, // 👈 passed from previous screen
                   donorName: "Anonymous", // Default
                   donorEmail: "anonymous@example.com", // Default
                   message: "Thank you for your donation!", // Default
@@ -123,7 +121,7 @@ class ScreenDonationAmount extends GetView<ControllerDonation> {
           Obx(
             () => AmountSelector(
               selectedAmount: controller.selectedAmount.value,
-              amounts: [50, 100, 200],
+              amounts: [20, 50, 100, 200],
               onSelected: (amount) {
                 controller.selectedAmount.value = amount;
               },

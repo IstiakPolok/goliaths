@@ -170,8 +170,9 @@ class ControllerHome extends GetxController {
       }
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
 
+        // Add user message
         chatMessages.add(
           ChatMessage(
             text: data["User"] ?? userMessage,
@@ -180,13 +181,22 @@ class ControllerHome extends GetxController {
           ),
         );
 
-        chatMessages.add(
-          ChatMessage(
-            text: data["AI"] ?? "No response",
-            role: ChatRole.ai,
-            chatPosition: ChatPosition.single,
-          ),
+        // Add streaming AI response
+        final aiResponse = data["AI"] ?? "No response";
+        final buffer = StringBuffer();
+        final aiMsg = ChatMessage(
+          text: "",
+          role: ChatRole.ai,
+          chatPosition: ChatPosition.single,
         );
+        chatMessages.add(aiMsg);
+
+        for (int i = 0; i < aiResponse.length; i++) {
+          await Future.delayed(const Duration(milliseconds: 20));
+          buffer.write(aiResponse[i]);
+          aiMsg.text = buffer.toString();
+          chatMessages.refresh();
+        }
       } else {
         Get.snackbar("Error", "Message failed to send.");
       }
@@ -200,7 +210,7 @@ class ControllerHome extends GetxController {
 }
 
 class ChatMessage {
-  final String text;
+  String text; // ✅ Now mutable
   final ChatRole role;
   final ChatPosition chatPosition;
 

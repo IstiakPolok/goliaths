@@ -11,10 +11,54 @@ class ScreenHome extends StatefulWidget {
 }
 
 class _ScreenHomeState extends State<ScreenHome> {
+  final List<String> dailyQuotes = [
+    "You were not created to struggle endlessly; peace is part of your design.",
+    "With every difficulty, there is the seed of ease — maybe more than once.",
+    "You are never alone in your pain — there is always someone listening, even in silence.",
+    "Patience is not just waiting — it is strength wrapped in calm.",
+    "Even when the world feels heavy, you are still guided gently toward light.",
+    "No soul is ever burdened with more than it can carry.",
+    "Your journey has meaning — even the slow days are shaping something beautiful.",
+    "Healing may take time, but no pain is permanent.",
+    "The night may feel long, but morning always arrives.",
+    "There is value in every small act of goodness — especially the ones you give yourself.",
+    "Your struggles don’t define you — how you rise through them does.",
+    "Peace starts inside — even if the world is loud.",
+    "You are more resilient than your thoughts tell you.",
+    "It’s brave to slow down and breathe when your mind wants to run.",
+    "You deserve gentleness — especially from yourself.",
+    "You can restart at any moment. You don’t need permission.",
+    "Quiet victories matter too — getting up, showing up, and trying again.",
+    "Your emotions are visitors. Let them come, feel them, and let them go.",
+    "You don’t have to do everything today. Healing is not a race.",
+    "Even if no one sees your effort, it still counts.",
+    "Let your heart rest. You are not behind in life.",
+    "When it’s dark, even the smallest light becomes powerful.",
+    "You are still growing, even in stillness.",
+    "Be soft with your past. You did the best you could.",
+    "You are not broken — you are becoming.",
+    "It’s not weakness to rest — it’s how strength is rebuilt.",
+    "There’s wisdom in the pauses. Don’t rush the process.",
+    "You’ve made it through so much. This moment will pass too.",
+    "Not every thought deserves your attention.",
+    "Your peace is more important than perfection.",
+  ];
+
+
+  String getTodayQuote() {
+    final today = DateTime.now();
+    // Use day of year or just day of month for simplicity
+    final index = today.day % dailyQuotes.length; // cycles through quotes each day
+    return dailyQuotes[index];
+  }
+
+
   @override
   void initState() {
     super.initState();
   }
+
+
 
   Widget build(BuildContext context) {
     final historyController = Get.put(ControllerHistory());
@@ -27,7 +71,8 @@ class _ScreenHomeState extends State<ScreenHome> {
 
     return Scaffold(
       appBar: HomeAppBar(
-        title: "Good Morning, ${profilecontroller.profile.value?.name}",
+        title:
+            "Good Morning, ${profilecontroller.profile.value?.name ?? 'Guys'}",
         isButton: false,
       ),
 
@@ -55,15 +100,18 @@ class _ScreenHomeState extends State<ScreenHome> {
                 ),
               ),
 
+
+
               child: Center(
                 child: Text(
-                  "\"You don't have to be great to start, but you have to start to be great.\"\n– Zig Ziglar",
+                  getTodayQuote(),
                   style: goliathsTypography.screenText.copyWith(
                     color: goliathsTheme.textOnPrimary,
                   ),
                 ),
               ),
-            ),
+
+    ),
             16.verticalSpace,
             // How may I help you Today? =======================================
             Text(
@@ -133,7 +181,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                         // Right Top Card
                         Expanded(
                           child: GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.donationHome),
+                            onTap: () => Get.toNamed(AppRoutes.donationAmount),
                             child: Container(
                               padding: EdgeInsets.all(16.r),
                               decoration: cardDecoration.copyWith(
