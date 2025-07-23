@@ -210,6 +210,51 @@ class ChatInputBox extends StatefulWidget {
 
 class _ChatInputBoxState extends State<ChatInputBox> {
   final TextEditingController _controller = TextEditingController();
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+
+
+  void _startListening() async {
+    bool available = await _speech.initialize(
+      onStatus: (status) {
+        debugPrint('🎙 Status: $status');
+      },
+      onError: (error) {
+        debugPrint('❌ Error: $error');
+      },
+    );
+
+    if (available) {
+      setState(() => _isListening = true);
+      _speech.listen(
+        onResult: (result) {
+          final spokenText = result.recognizedWords;
+          debugPrint('🗣 Speech-to-Text: $spokenText'); // <--- Here you see result
+          setState(() {
+            _controller.text = spokenText;
+          });
+        },
+      );
+    } else {
+      debugPrint('⚠️ Speech not available');
+    }
+  }
+
+  void _stopListening() async {
+    if (_isListening) {
+      await _speech.stop();
+      setState(() => _isListening = false);
+      debugPrint('🛑 Stopped listening');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -241,14 +286,16 @@ class _ChatInputBoxState extends State<ChatInputBox> {
           SizedBox(width: widget.gap),
 
           // Voice Button
-          InkWell(
-            splashColor: goliathsTheme.primary.withValues(alpha: 0.05),
-            onTap: () {},
+          GestureDetector(
+            onTapDown: (_) => _startListening(),
+            onTapUp: (_) => _stopListening(),
+            onTapCancel: _stopListening,
             child: _iconButton(
               icon: SvgAssetLoader("assets/icons/mic.svg"),
               color: goliathsTheme.primary,
             ),
           ),
+
           SizedBox(width: widget.gap),
           InkWell(
             onTap: () {
