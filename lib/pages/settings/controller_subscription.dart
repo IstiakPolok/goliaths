@@ -1,41 +1,51 @@
 part of '../_pages.dart';
 
 class ControllerSubscription extends GetxController {
-  /// Indicates if the subscription is active
+  /// Indicates if the subscription is currently active
   final RxBool isActive = false.obs;
 
-  /// Holds the list of available subscription plans
+  /// List of all available subscription plans
   final RxList<Map<String, dynamic>> plans = <Map<String, dynamic>>[].obs;
 
-  /// Loading state for fetching plans
+  /// Loading state while fetching plans
   final RxBool isLoading = false.obs;
+
+  /// Holds the currently subscribed plan ID
+  final RxInt currentSubscribedPlanId = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     print('DEBUG: ControllerSubscription onInit called.');
+    _loadCurrentSubscribedPlanId();
     fetchPlans();
   }
 
-  /// Fetches subscription plans from API and updates the `plans` list
+  /// Load the current subscription ID from local storage
+  Future<void> _loadCurrentSubscribedPlanId() async {
+    final savedSubId = await SharedPreferencesHelper.getSubscriptionId();
+    if (savedSubId != null) {
+      currentSubscribedPlanId.value = savedSubId;
+      print("DEBUG: Loaded current subscribed plan ID: $savedSubId");
+    }
+  }
+
+  /// Fetch available subscription plans from the backend
   Future<void> fetchPlans() async {
     isLoading.value = true;
     print('DEBUG: fetchPlans started. isLoading set to true.');
 
     try {
       final token = await SharedPreferencesHelper.getAccessToken();
-      print(
-        'DEBUG: Retrieved access token: ${token != null && token.isNotEmpty ? "Token found" : "Token not found/empty"}',
-      );
+      print('DEBUG: Access token: ${token?.isNotEmpty == true ? "✔ Available" : "❌ Missing"}');
 
       if (token == null || token.isEmpty) {
         Get.snackbar("Error", "Access token not found. Please log in again.");
-        print('DEBUG: Access token is null or empty. Aborting fetchPlans.');
         return;
       }
 
       final uri = Uri.parse(Urls.planlist);
-      print('DEBUG: API URL for plan list: $uri');
+      print('DEBUG: API URL: $uri');
 
       final response = await http.get(
         uri,
@@ -45,33 +55,30 @@ class ControllerSubscription extends GetxController {
         },
       );
 
-      print('DEBUG: API Response Status Code: ${response.statusCode}');
-      print('DEBUG: API Response Body: ${response.body}');
+      print('DEBUG: API Status Code: ${response.statusCode}');
+      print('DEBUG: API Response: ${response.body}');
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         plans.value = data.cast<Map<String, dynamic>>();
-        print('DEBUG: Successfully loaded ${plans.length} subscription plans.');
+        print('✅ Loaded ${plans.length} subscription plans.');
+
+        for (var plan in plans) {
+          if (plan['id'] == currentSubscribedPlanId.value) {
+            print("🎯 MATCH FOUND: '${plan['name']}' (ID: ${plan['id']}) is the current subscription.");
+          }
+        }
       } else {
-        Get.snackbar(
-          "Error",
-          "Failed to load subscription plans. Status: ${response.statusCode}",
-        );
-        print(
-          "ERROR: Failed to load subscription plans. Response body: ${response.body}",
-        );
+        Get.snackbar("Error", "Failed to load plans. (${response.statusCode})");
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Something went wrong: Check your internet connection or try again later.",
-      );
-      print("EXCEPTION: An error occurred during fetchPlans: $e");
+      print("❌ EXCEPTION in fetchPlans: $e");
+      Get.snackbar("Error", "Something went wrong. Try again later.");
     } finally {
       isLoading.value = false;
-      print('DEBUG: fetchPlans finished. isLoading set to false.');
     }
   }
+
 
   /// Creates a checkout session for a selected plan
   Future<void> createCheckoutSession(Map<String, dynamic> plan) async {

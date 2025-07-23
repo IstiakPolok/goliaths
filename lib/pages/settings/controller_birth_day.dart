@@ -1,11 +1,13 @@
 part of '../_pages.dart';
 
 class BirthdayItem {
+  final int id; // ← Add this
   final String name;
   final String birthday;
   final String image;
 
   const BirthdayItem({
+    required this.id, // ← Add this
     required this.name,
     required this.birthday,
     required this.image,
@@ -14,12 +16,14 @@ class BirthdayItem {
   DateTime get parsedDate => DateTime.tryParse(birthday) ?? DateTime(1900);
 }
 
+
 class ControllerBirthDay extends GetxController {
   final todays = RxList<BirthdayItem>([]);
   final upcomings = RxList<BirthdayItem>([]);
   final allFriends = RxList<BirthdayItem>([]);
   final filteredFriends = RxList<BirthdayItem>([]);
   final searchController = TextEditingController();
+
 
   @override
   void onInit() {
@@ -66,14 +70,15 @@ class ControllerBirthDay extends GetxController {
         final List<dynamic> data = jsonDecode(response.body);
         print("✅ Parsed Data Count: ${data.length}");
 
-        final List<BirthdayItem> friends =
-            data.map((item) {
-              final name = item['name'] ?? '';
-              final birthday = item['birthday'] ?? '';
-              final image = 'https://avatar.iran.liara.run/public';
-              print("👤 Friend: $name | Birthday: $birthday");
-              return BirthdayItem(name: name, birthday: birthday, image: image);
-            }).toList();
+        final List<BirthdayItem> friends = data.map((item) {
+          final id = item['id']; // ← Get ID
+          final name = item['name'] ?? '';
+          final birthday = item['birthday'] ?? '';
+          final image = 'https://avatar.iran.liara.run/public';
+
+          return BirthdayItem(id: id, name: name, birthday: birthday, image: image);
+        }).toList();
+
 
         groupBirthDayList(friends);
       } else {
@@ -85,6 +90,35 @@ class ControllerBirthDay extends GetxController {
       print("🔥 Exception: $e");
     }
   }
+
+  Future<void> deleteFriendBirthday(int id) async {
+    try {
+      final token = await SharedPreferencesHelper.getAccessToken();
+      final response = await http.delete(
+        Uri.parse("${Urls.baseUrl}/friends/$id/"),
+        headers: {
+          "Authorization": "JWT $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (response.statusCode == 204) {
+        allFriends.removeWhere((item) => item.id == id);
+        filteredFriends.removeWhere((item) => item.id == id);
+        todays.removeWhere((item) => item.id == id);
+        upcomings.removeWhere((item) => item.id == id);
+
+        Get.snackbar("Deleted", "Birthday entry removed successfully.");
+      } else {
+        Get.snackbar("Error", "Failed to delete entry.");
+        print("❌ Failed: ${response.statusCode} - ${response.body}");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong.");
+      print("🔥 Exception: $e");
+    }
+  }
+
 
   void groupBirthDayList(List<BirthdayItem> allBirthdays) {
     final now = DateTime.now();
