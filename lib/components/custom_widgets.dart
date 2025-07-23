@@ -220,40 +220,45 @@ class _ChatInputBoxState extends State<ChatInputBox> {
     _speech = stt.SpeechToText();
   }
 
+  Future<void> _startListening() async {
+    var status = await Permission.microphone.request();
+    if (!status.isGranted) {
+      debugPrint('❌ Microphone permission not granted');
+      return;
+    }
 
-  void _startListening() async {
     bool available = await _speech.initialize(
-      onStatus: (status) {
-        debugPrint('🎙 Status: $status');
-      },
-      onError: (error) {
-        debugPrint('❌ Error: $error');
-      },
+      onStatus: (status) => debugPrint('🎙 Status: $status'),
+      onError: (error) => debugPrint('❌ Error: ${error.errorMsg}'),
+      // ❌ NO onResult here — not supported
     );
 
     if (available) {
+      debugPrint('✅ Speech is available');
       setState(() => _isListening = true);
+
       _speech.listen(
+        localeId: 'en_US',
+        listenMode: stt.ListenMode.confirmation,
         onResult: (result) {
-          final spokenText = result.recognizedWords;
-          debugPrint('🗣 Speech-to-Text: $spokenText'); // <--- Here you see result
-          setState(() {
-            _controller.text = spokenText;
-          });
+          debugPrint('🗣 Speech-to-Text: ${result.recognizedWords}');
+          _controller.text = result.recognizedWords;
         },
       );
     } else {
-      debugPrint('⚠️ Speech not available');
+      debugPrint('❌ Speech not available');
     }
   }
+
 
   void _stopListening() async {
     if (_isListening) {
       await _speech.stop();
-      setState(() => _isListening = false);
+      _isListening = false;
       debugPrint('🛑 Stopped listening');
     }
   }
+
 
 
   @override
