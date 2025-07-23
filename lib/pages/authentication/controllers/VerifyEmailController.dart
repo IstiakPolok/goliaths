@@ -59,6 +59,12 @@ class VerifyEmailController extends GetxController {
     otpController.dispose();
     super.onClose();
   }
+  // @override
+  // void onClose() {
+  //   emailController.dispose();
+  //   otpController.dispose();
+  //   super.onClose();
+  // }
 
   final otpController = TextEditingController();
 

@@ -10,6 +10,7 @@ class DobController extends GetxController {
 
   Future<void> updateDateOfBirth(String dob) async {
     isLoading.value = true;
+    //isLoading.value = true;
 
     final token = await SharedPreferencesHelper.getAccessToken();
     final url = Uri.parse(Urls.profileupdate);

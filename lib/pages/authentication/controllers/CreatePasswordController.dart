@@ -11,6 +11,7 @@ class CreatePasswordController extends GetxController {
   final isLoading = false.obs;
 
   late String email;
+  //late String email;
 
   void initEmail(String userEmail) {
     email = userEmail;
