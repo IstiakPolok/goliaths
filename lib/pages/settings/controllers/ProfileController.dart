@@ -80,6 +80,18 @@ class ProfileController extends GetxController {
         print("Parsed Profile: ${profile.value}");
         print("Name: ${profile.value?.name}");
         print("Email: ${profile.value?.email}");
+        final subscriptions = data['subscriptions'];
+        if (subscriptions != null &&
+            subscriptions is List &&
+            subscriptions.isNotEmpty &&
+            subscriptions[0]['plan'] != null &&
+            subscriptions[0]['plan']['id'] != null) {
+          final int planId = subscriptions[0]['plan']['id'];
+          await SharedPreferencesHelper.saveSubscriptionId(planId);
+          print("✅ Plan ID saved: $planId");
+        } else {
+          print("⚠️ No valid plan ID found.");
+        }
       } else {
         print("Failed to fetch profile: ${response.statusCode}");
         profile.value = null;

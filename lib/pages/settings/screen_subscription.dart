@@ -142,39 +142,44 @@ class ScreenSubscription extends GetView<ControllerSubscription> {
                                 ),
                                 SizedBox(height: 16.h),
                                 // Dynamically build feature items
-                                ...planFeatures
-                                    .map(
-                                      (featureText) => _buildFeatureItem(
-                                        featureText
-                                            .toString(), // Ensure it's a string
-                                        color: goliathsTheme.textOnPrimary,
-                                      ),
-                                    )
-                                    .toList(),
+                                ...planFeatures.map((featureText) {
+                                  // Check if featureText is Map and has 'description'
+                                  String cleanedText = '';
+                                  if (featureText is Map && featureText.containsKey('description')) {
+                                    cleanedText = featureText['description'] ?? '';
+                                  } else {
+                                    cleanedText = featureText.toString();
+                                  }
+
+                                  return _buildFeatureItem(
+                                    cleanedText,
+                                    color: goliathsTheme.textOnPrimary,
+                                  );
+                                }).toList(),
+
+
+
                                 SizedBox(height: 16.h),
-                                Obx(
-                                  () => CustomElevatedButton(
-                                    backgroundColor:
-                                        controller.isActive.value
-                                            ? goliathsTheme.background
-                                            : goliathsTheme.accent,
-                                    text:
-                                        controller.isActive.value
-                                            ? "Activated"
-                                            : "Buy",
+                                Obx(() {
+                                  final isCurrentPlan =
+                                      controller.currentSubscribedPlanId.value == plan['id'];
+
+                                  return CustomElevatedButton(
+                                    backgroundColor: isCurrentPlan
+                                        ? goliathsTheme.background
+                                        : goliathsTheme.accent,
+                                    text: isCurrentPlan ? "Activated" : "Buy",
                                     onPressed: () async {
-                                      if (controller.isActive.value) {
-                                        showCancelSubscription();
+                                      if (isCurrentPlan) {
+                                        //showCancelSubscription();
                                       } else {
-                                        await controller.createCheckoutSession(
-                                          plan,
-                                        );
+                                        await controller.createCheckoutSession(plan);
                                       }
                                     },
-
                                     isFullWidth: true,
-                                  ),
-                                ),
+                                  );
+                                }),
+
                               ],
                             ),
                           ),

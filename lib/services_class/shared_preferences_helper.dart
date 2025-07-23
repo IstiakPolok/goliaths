@@ -12,6 +12,7 @@ class SharedPreferencesHelper {
   static const String _categoriesKey = "categories";
   static const String _isWelcomeDialogShownKey =
       'isDriverVerificationDialogShown';
+  static const String _subscriptionIdKey = 'subscriptionId';
 
   // Save categories (id and name only)
   static Future<void> saveCategories(
@@ -30,6 +31,19 @@ class SharedPreferencesHelper {
       return List<Map<String, String>>.from(jsonDecode(categoriesJson));
     }
     return [];
+  }
+
+
+
+  static Future<void> saveSubscriptionId(int id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_subscriptionIdKey, id);
+    print("✅ Subscription ID saved: $id");
+  }
+
+  static Future<int?> getSubscriptionId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_subscriptionIdKey);
   }
 
   // Save access token

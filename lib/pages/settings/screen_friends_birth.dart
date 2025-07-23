@@ -169,48 +169,64 @@ class BirthdayItemWidget extends StatelessWidget {
         border: Border.all(color: goliathsTheme.stroke, width: 2),
         borderRadius: BorderRadius.circular(26.r),
       ),
-      child: Row(
-        children: [
-          Image.network(item.image, height: 40.h, width: 40.h),
-          16.horizontalSpace,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  item.name,
-                  style: goliathsTypography.screenText.copyWith(
-                    color: goliathsTheme.text,
-                    fontSize: 16.sp,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                Text(
-                  "Birthday: ${item.birthday}",
-                  style: goliathsTypography.screenText.copyWith(
-                    color: goliathsTheme.text.withValues(alpha: 0.8),
-                    fontSize: 13.sp,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ],
-            ),
-          ),
-          16.horizontalSpace,
-          GestureDetector(
-            onTap: () {
-              final message = "Hey ${item.name}, wishing you a very Happy Birthday! 🎉🎂";
-              Share.share(message);
+      child: GestureDetector(
+        onLongPress: () {
+          Get.defaultDialog(
+            title: "Delete",
+            middleText: "Are you sure you want to delete ${item.name}'s birthday?",
+            textConfirm: "Delete",
+            textCancel: "Cancel",
+            confirmTextColor: Colors.white,
+            onConfirm: () {
+              Get.find<ControllerBirthDay>().deleteFriendBirthday(item.id);
+              Get.back();
             },
-            child: SvgPicture.asset(
-              "assets/icons/whatsapp.svg",
-              height: 20.h,
-              width: 20.h,
+          );
+        },
+        child: Row(
+          children: [
+            Image.network(item.image, height: 40.h, width: 40.h),
+            16.horizontalSpace,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    item.name,
+                    style: goliathsTypography.screenText.copyWith(
+                      color: goliathsTheme.text,
+                      fontSize: 16.sp,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                  Text(
+                    "Birthday: ${item.birthday}",
+                    style: goliathsTypography.screenText.copyWith(
+                      color: goliathsTheme.text.withValues(alpha: 0.8),
+                      fontSize: 13.sp,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ],
+              ),
             ),
-          ),
+            16.horizontalSpace,
+            GestureDetector(
+              onTap: () {
+                final message = "Hey ${item.name}, wishing you a very Happy Birthday! 🎉🎂";
+                Share.share(message);
+              },
+              child: SvgPicture.asset(
+                "assets/icons/whatsapp.svg",
+                height: 20.h,
+                width: 20.h,
+              ),
+            ),
 
-        ],
+          ],
+        ),
       ),
+
     );
   }
 }

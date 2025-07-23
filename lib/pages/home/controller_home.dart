@@ -146,10 +146,42 @@ class ControllerHome extends GetxController {
   //     }
   //     Get.snackbar("Error", "Something went wrong.");
   //   }
-  // }
+  // }  1227   4242424242424242
+
+
 
   Future<void> sendMessageToChat(int chatId, String userMessage) async {
     try {
+      // Add user message
+      final userMsg = ChatMessage(
+        text: userMessage,
+        role: ChatRole.user,
+        chatPosition: ChatPosition.single,
+      );
+      chatMessages.add(userMsg);
+
+      // Add temporary AI loader
+      final aiLoaderMsg = ChatMessage(
+        text: ".",
+        role: ChatRole.ai,
+        chatPosition: ChatPosition.single,
+      );
+      chatMessages.add(aiLoaderMsg);
+
+      // Start animated dot loader in a separate async loop
+      bool keepLoading = true;
+      int dotCount = 1;
+
+      Future loader = Future(() async {
+        while (keepLoading) {
+          aiLoaderMsg.text = "." * dotCount;
+          dotCount = dotCount == 3 ? 1 : dotCount + 1;
+          chatMessages.refresh();
+          await Future.delayed(const Duration(milliseconds: 400));
+        }
+      });
+
+      // Send request to API
       final token = await SharedPreferencesHelper.getAccessToken();
       final url = Uri.parse(
         "${Urls.baseUrl}/conversations/$chatId/send_message/",
@@ -164,6 +196,10 @@ class ControllerHome extends GetxController {
         body: jsonEncode({"title": userMessage}),
       );
 
+      // Stop dot animation
+      keepLoading = false;
+      await loader;
+
       if (kDebugMode) {
         print("✅ Message sent: $userMessage");
         print("🧠 Response: ${response.body}");
@@ -171,42 +207,28 @@ class ControllerHome extends GetxController {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
-
-        // Add user message
-        chatMessages.add(
-          ChatMessage(
-            text: data["User"] ?? userMessage,
-            role: ChatRole.user,
-            chatPosition: ChatPosition.single,
-          ),
-        );
-
-        // Add streaming AI response
         final aiResponse = data["AI"] ?? "No response";
-        final buffer = StringBuffer();
-        final aiMsg = ChatMessage(
-          text: "",
-          role: ChatRole.ai,
-          chatPosition: ChatPosition.single,
-        );
-        chatMessages.add(aiMsg);
 
+        // Typing effect
+        final buffer = StringBuffer();
         for (int i = 0; i < aiResponse.length; i++) {
           await Future.delayed(const Duration(milliseconds: 20));
           buffer.write(aiResponse[i]);
-          aiMsg.text = buffer.toString();
+          aiLoaderMsg.text = buffer.toString();
           chatMessages.refresh();
         }
       } else {
+        aiLoaderMsg.text = "⚠️ Failed to get AI response.";
+        chatMessages.refresh();
         Get.snackbar("Error", "Message failed to send.");
       }
     } catch (e) {
-      if (kDebugMode) {
-        print("❌ sendMessage error: $e");
-      }
       Get.snackbar("Error", "Something went wrong.");
+      if (kDebugMode) print("❌ sendMessage error: $e");
     }
   }
+
+
 }
 
 class ChatMessage {
