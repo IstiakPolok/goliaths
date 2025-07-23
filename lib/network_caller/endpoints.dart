@@ -9,6 +9,9 @@ class Urls {
   static const String chatList = '$baseUrl/conversations/';
   static const String donationSummary = '$baseUrl/donations/summary/';
   static const String donation = '$baseUrl/donations/';
+  static const String privacy = '$baseUrl/privacy/';
+  static const String terms = '$baseUrl/terms/';
+  static const String planlist = '$baseUrl/plans/';
 
   static const String profileupdate = '$baseUrl/auth/profile/';
 

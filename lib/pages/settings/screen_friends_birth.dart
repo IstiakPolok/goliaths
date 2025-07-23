@@ -3,11 +3,21 @@ part of '../_pages.dart';
 /// ****************************************************************************
 /// Friends birth list
 /// ****************************************************************************
-class ScreenFriendsBirth extends GetView<ControllerBirthDay> {
+
+class ScreenFriendsBirth extends StatefulWidget {
   const ScreenFriendsBirth({super.key});
 
   @override
+  State<ScreenFriendsBirth> createState() => _ScreenFriendsBirthState();
+}
+
+class _ScreenFriendsBirthState extends State<ScreenFriendsBirth> {
+  final controller = Get.find<ControllerBirthDay>();
+
+  @override
   Widget build(BuildContext context) {
+    final isSearching = controller.searchController.text.trim().isNotEmpty;
+
     return Scaffold(
       appBar: ChildPageAppBar(title: "Birthdate"),
       body: SafeArea(
@@ -17,35 +27,63 @@ class ScreenFriendsBirth extends GetView<ControllerBirthDay> {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(child: 12.verticalSpace),
-              SliverToBoxAdapter(child: SearchBox()),
+              SliverToBoxAdapter(
+                child: SearchBox(controller: controller.searchController),
+              ),
               SliverToBoxAdapter(child: 8.verticalSpace),
-              if (controller.todays.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: SectionHeader(sectionTitle: "Birthdays Today"),
-                ),
-              SliverList.separated(
-                itemCount: controller.todays.length,
-                itemBuilder: (context, index) {
-                  return BirthdayItemWidget(item: controller.todays[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return 12.verticalSpace;
-                },
-              ),
-              if (controller.upcomings.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: SectionHeader(sectionTitle: "Upcoming Birthdays"),
-                ),
-              SliverList.separated(
-                itemCount: controller.upcomings.length,
-                itemBuilder: (context, index) {
-                  return BirthdayItemWidget(item: controller.upcomings[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return 12.verticalSpace;
-                },
-              ),
-              SliverToBoxAdapter(child: 28.verticalSpace),
+
+              Obx(() {
+                if (isSearching) {
+                  if (controller.filteredFriends.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 20.h),
+                        child: Center(
+                          child: Text(
+                            "No matching results found.",
+                            style: goliathsTypography.screenText,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return SliverList(
+                    delegate: SliverChildListDelegate([
+                      SectionHeader(sectionTitle: "Search Results"),
+                      ...controller.filteredFriends
+                          .map((item) => BirthdayItemWidget(item: item))
+                          .toList(),
+                      28.verticalSpace,
+                    ]),
+                  );
+                } else {
+                  return SliverList(
+                    delegate: SliverChildListDelegate([
+                      if (controller.todays.isNotEmpty) ...[
+                        SectionHeader(sectionTitle: "Birthdays Today"),
+                        ...controller.todays
+                            .map((item) => BirthdayItemWidget(item: item))
+                            .toList(),
+                        12.verticalSpace,
+                      ],
+                      if (controller.upcomings.isNotEmpty) ...[
+                        SectionHeader(sectionTitle: "Upcoming Birthdays"),
+                        ...controller.upcomings
+                            .map((item) => BirthdayItemWidget(item: item))
+                            .toList(),
+                        12.verticalSpace,
+                      ],
+                      if (controller.filteredFriends.isNotEmpty) ...[
+                        SectionHeader(sectionTitle: "All Friends"),
+                        ...controller.filteredFriends
+                            .map((item) => BirthdayItemWidget(item: item))
+                            .toList(),
+                        28.verticalSpace,
+                      ],
+                    ]),
+                  );
+                }
+              }),
             ],
           ),
         ),
@@ -91,7 +129,7 @@ class SearchBox extends StatelessWidget {
           borderSide: BorderSide(color: goliathsTheme.stroke),
         ),
       ),
-      textInputAction: TextInputAction.newline,
+      textInputAction: TextInputAction.search,
       style: goliathsTypography.screenText,
     );
   }
@@ -125,6 +163,7 @@ class BirthdayItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 26.r),
       decoration: BoxDecoration(
         border: Border.all(color: goliathsTheme.stroke, width: 2),
@@ -159,13 +198,17 @@ class BirthdayItemWidget extends StatelessWidget {
           ),
           16.horizontalSpace,
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              final message = "Hey ${item.name}, wishing you a very Happy Birthday! 🎉🎂";
+              Share.share(message);
+            },
             child: SvgPicture.asset(
               "assets/icons/whatsapp.svg",
               height: 20.h,
               width: 20.h,
             ),
           ),
+
         ],
       ),
     );

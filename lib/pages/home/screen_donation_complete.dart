@@ -26,7 +26,7 @@ class ScreenDonationComplete extends StatelessWidget {
                 ),
                 24.verticalSpace,
                 Text(
-                  "Thank You!\nDonation Completed",
+                  "Thank You!\nPayment Completed",
                   style: goliathsTypography.screenHeading.copyWith(
                     color: goliathsTheme.text,
                     fontWeight: FontWeight.w500,

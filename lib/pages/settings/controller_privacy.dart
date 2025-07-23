@@ -1,14 +1,32 @@
 part of '../_pages.dart';
 
 class ControllerPrivacy extends GetxController {
-  final privacy =
-      '''
-1. We respect your privacy and are committed to protecting your personal data. Any information collected through Breaking Goliaths is used solely to improve your experience.\n
-2. Your data will never be sold, shared, or disclosed to third parties without your explicit consent, unless required by law.\n
-3. We use standard security measures to protect your information from unauthorized access, alteration, or destruction.\n
-4. When you interact with Breaking Goliaths, certain non-personal data (such as device type and usage statistics) may be collected to help us enhance the app's performance.\n
-5. You have the right to request access to, update, or delete your personal information at any time by contacting our support team.\n
-6. Breaking Goliaths may include links to third-party websites. We are not responsible for the privacy practices of these external sites.\n
-7. By using Breaking Goliaths, you agree to the collection and use of your information as described in this Privacy Policy. We reserve the right to update these terms at any time.\n
-'''.obs;
+  var isLoading = false.obs;
+  var title = ''.obs;
+  var content = ''.obs;
+
+  @override
+  void onInit() {
+    fetchPrivacyPolicy();
+    super.onInit();
+  }
+
+  Future<void> fetchPrivacyPolicy() async {
+    try {
+      isLoading.value = true;
+      final response = await http.get(Uri.parse(Urls.privacy));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        title.value = data['title'] ?? '';
+        content.value = data['content'] ?? '';
+      } else {
+        Get.snackbar('Error', 'Failed to load privacy policy');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Something went wrong: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

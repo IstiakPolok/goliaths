@@ -143,7 +143,7 @@ class _ModalEditProfileState extends State<ModalEditProfile> {
   @override
   Widget build(BuildContext context) {
     return CloseAbleDialog(
-      isChildScrollable: true,
+      //isChildScrollable: true,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -206,15 +206,15 @@ class _ModalEditProfileState extends State<ModalEditProfile> {
                     style: goliathsTypography.screenText,
                   ),
 
-                  AwesomeCalenDart(
-                    elevation: 0,
-                    theme: AwesomeTheme(
-                      selectedDateBackgroundColor: goliathsTheme.accent,
-                      yearAndMonthHeaderTextStyle:
-                          goliathsTypography.screenTitle,
-                      unselectedDayTextStyle: goliathsTypography.screenText,
-                    ),
-                  ),
+                  // AwesomeCalenDart(
+                  //   elevation: 0,
+                  //   theme: AwesomeTheme(
+                  //     selectedDateBackgroundColor: goliathsTheme.accent,
+                  //     yearAndMonthHeaderTextStyle:
+                  //         goliathsTypography.screenTitle,
+                  //     unselectedDayTextStyle: goliathsTypography.screenText,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -389,12 +389,9 @@ class _ModalFriendBirthDateState extends State<ModalFriendBirthDate> {
   @override
   Widget build(BuildContext context) {
     return CloseAbleDialog(
-      isChildScrollable: true,
-
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             Text('Add Friend Birthdate', style: goliathsTypography.screenTitle),
             const SizedBox(height: 20),

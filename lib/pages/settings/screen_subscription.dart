@@ -16,128 +16,175 @@ class ScreenSubscription extends GetView<ControllerSubscription> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Basic Plan Card
-            Card(
-              color: goliathsTheme.background,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(22),
-                side: BorderSide(color: goliathsTheme.stroke, width: 1),
-              ),
-              elevation: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Basic Plan',
-                          style: goliathsTypography.screenTitle.copyWith(
-                            color: goliathsTheme.text,
-                            fontSize: 18.sp,
-                          ),
-                        ),
-                        Text(
-                          'Free',
-                          style: goliathsTypography.screenTitle.copyWith(
-                            color: goliathsTheme.text,
-                            fontSize: 18.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    _buildFeatureItem(
-                      'AI assistant helps with creating, organizing, and reminding you of tasks and deadlines',
-                      color: goliathsTheme.primary,
-                    ),
-                    _buildFeatureItem(
-                      'Provide quick answers to general knowledge questions and weather',
-                      color: goliathsTheme.primary,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Basic Plan Card (Static as per your original code)
+            // Card(
+            //   color: goliathsTheme.background,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(22),
+            //     side: BorderSide(color: goliathsTheme.stroke, width: 1),
+            //   ),
+            //   elevation: 0,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(16.0),
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             Text(
+            //               'Basic Plan',
+            //               style: goliathsTypography.screenTitle.copyWith(
+            //                 color: goliathsTheme.text,
+            //                 fontSize: 18.sp,
+            //               ),
+            //             ),
+            //             Text(
+            //               'Free',
+            //               style: goliathsTypography.screenTitle.copyWith(
+            //                 color: goliathsTheme.text,
+            //                 fontSize: 18.sp,
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //         SizedBox(height: 16),
+            //         _buildFeatureItem(
+            //           'AI assistant helps with creating, organizing, and reminding you of tasks and deadlines',
+            //           color: goliathsTheme.primary,
+            //         ),
+            //         _buildFeatureItem(
+            //           'Provide quick answers to general knowledge questions and weather',
+            //           color: goliathsTheme.primary,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 16),
-            // Premium Plan Card
-            Card(
-              elevation: 30,
-              shadowColor: goliathsTheme.primary.withValues(alpha: 0.2),
-              color: goliathsTheme.onPrimary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(22.r),
-                side: BorderSide(color: Colors.white24, width: 1),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Premium Plan',
-                          style: goliathsTypography.screenTitle.copyWith(
-                            color: goliathsTheme.textOnPrimary,
-                            fontSize: 18.sp,
+            // Observe the plans list from the controller
+            Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (controller.plans.isEmpty) {
+                return const Center(
+                  child: Text("No premium plans available at the moment."),
+                );
+              } else {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: controller.plans.length,
+                    itemBuilder: (context, index) {
+                      final plan = controller.plans[index];
+                      // Assuming 'name', 'price', and 'features' are keys in your plan map
+                      final String planName = plan['name'] ?? 'Unknown Plan';
+                      final String planPrice =
+                          plan['price'] != null
+                              ? '\$${plan['price'].toString()}/month'
+                              : 'Price TBD';
+                      final List<dynamic> planFeatures =
+                          plan['features'] ??
+                          []; // Assuming features is a list of strings
+
+                      // You can customize the look of each dynamic plan card here
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 16.0,
+                        ), // Spacing between cards
+                        child: Card(
+                          elevation: 30,
+                          shadowColor: goliathsTheme.primary.withValues(
+                            alpha: 0.2,
+                          ),
+                          color: goliathsTheme.onPrimary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.r),
+                            side: BorderSide(color: Colors.white24, width: 1),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      planName,
+                                      style: goliathsTypography.screenTitle
+                                          .copyWith(
+                                            color: goliathsTheme.textOnPrimary,
+                                            fontSize: 18.sp,
+                                          ),
+                                    ),
+                                    Text(
+                                      planPrice,
+                                      style: goliathsTypography.screenTitle
+                                          .copyWith(
+                                            color: goliathsTheme.textOnPrimary,
+                                            fontSize: 18.sp,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  // This text can be dynamic based on your API response or a default for premium
+                                  'Includes all features from the Basic Plan, plus:',
+                                  style: goliathsTypography.screenText.copyWith(
+                                    color: goliathsTheme.textOnPrimary
+                                        .withValues(alpha: 0.6),
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                                SizedBox(height: 16.h),
+                                // Dynamically build feature items
+                                ...planFeatures
+                                    .map(
+                                      (featureText) => _buildFeatureItem(
+                                        featureText
+                                            .toString(), // Ensure it's a string
+                                        color: goliathsTheme.textOnPrimary,
+                                      ),
+                                    )
+                                    .toList(),
+                                SizedBox(height: 16.h),
+                                Obx(
+                                  () => CustomElevatedButton(
+                                    backgroundColor:
+                                        controller.isActive.value
+                                            ? goliathsTheme.background
+                                            : goliathsTheme.accent,
+                                    text:
+                                        controller.isActive.value
+                                            ? "Activated"
+                                            : "Buy",
+                                    onPressed: () async {
+                                      if (controller.isActive.value) {
+                                        showCancelSubscription();
+                                      } else {
+                                        await controller.createCheckoutSession(
+                                          plan,
+                                        );
+                                      }
+                                    },
+
+                                    isFullWidth: true,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Text(
-                          '\$10/month',
-                          style: goliathsTypography.screenTitle.copyWith(
-                            color: goliathsTheme.textOnPrimary,
-                            fontSize: 18.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      'Includes all features from the Basic and Standard Plans, plus:',
-                      style: goliathsTypography.screenText.copyWith(
-                        color: goliathsTheme.textOnPrimary.withValues(
-                          alpha: 0.6,
-                        ),
-                        fontSize: 13.sp,
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    _buildFeatureItem(
-                      'AI assistant helps with creating, organizing, and reminding you of tasks and deadlines',
-                      color: goliathsTheme.textOnPrimary,
-                    ),
-                    _buildFeatureItem(
-                      'Provide quick answers to general knowledge questions and weather',
-                      color: goliathsTheme.textOnPrimary,
-                    ),
-                    SizedBox(height: 16.h),
-                    Obx(
-                      () => CustomElevatedButton(
-                        backgroundColor:
-                            controller.isActive.value
-                                ? goliathsTheme.background
-                                : goliathsTheme.accent,
-                        text: controller.isActive.value ? "Activated" : "Buy",
-                        onPressed: () {
-                          if(controller.isActive.value){
-                            showCancelSubscription();
-                          }else {
-                            controller.isActive.value = true;
-                          }
-                        },
-                        isFullWidth: true,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                      );
+                    },
+                  ),
+                );
+              }
+            }),
           ],
         ),
       ),
@@ -163,6 +210,7 @@ class ScreenSubscription extends GetView<ControllerSubscription> {
                 onPressed: () {
                   controller.isActive.value = false;
                   Get.close(1);
+                  Get.snackbar("Success", "Subscription cancelled.");
                 },
               ),
             ],

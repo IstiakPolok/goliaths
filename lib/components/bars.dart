@@ -182,7 +182,8 @@ class ChildPageAppBar extends StatelessWidget implements PreferredSizeWidget {
 class BottomBar extends StatelessWidget {
   final int selectedIndex;
 
-  const BottomBar({super.key, required this.selectedIndex});
+  BottomBar({super.key, required this.selectedIndex});
+  final controllerHome = Get.put(ControllerHome());
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +211,8 @@ class BottomBar extends StatelessWidget {
               selected: selectedIndex == 1,
               onClick: () {
                 if (selectedIndex == 1) return;
-                Get.toNamed(AppRoutes.chat);
+                // Get.toNamed(AppRoutes.chat);
+                controllerHome.selectModeAndStartChat("friend");
               },
             ),
             _BottomBarItem(

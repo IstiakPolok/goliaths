@@ -17,11 +17,33 @@ class BirthdayItem {
 class ControllerBirthDay extends GetxController {
   final todays = RxList<BirthdayItem>([]);
   final upcomings = RxList<BirthdayItem>([]);
+  final allFriends = RxList<BirthdayItem>([]);
+  final filteredFriends = RxList<BirthdayItem>([]);
+  final searchController = TextEditingController();
 
   @override
   void onInit() {
     super.onInit();
+    searchController.addListener(_onSearchChanged);
     fetchFriendsBirthdays();
+  }
+
+  @override
+  void onClose() {
+    // searchController.removeListener(_onSearchChanged);
+    // searchController.dispose();
+    super.onClose();
+  }
+
+  void _onSearchChanged() {
+    final query = searchController.text.toLowerCase();
+    if (query.isEmpty) {
+      filteredFriends.assignAll(allFriends);
+    } else {
+      filteredFriends.assignAll(
+        allFriends.where((item) => item.name.toLowerCase().contains(query)),
+      );
+    }
   }
 
   Future<void> fetchFriendsBirthdays() async {
@@ -88,5 +110,7 @@ class ControllerBirthDay extends GetxController {
 
     todays.assignAll(birthdaysToday);
     upcomings.assignAll(upcomingBirthdays);
+    allFriends.assignAll(allBirthdays);
+    filteredFriends.assignAll(allBirthdays); // for search
   }
 }
