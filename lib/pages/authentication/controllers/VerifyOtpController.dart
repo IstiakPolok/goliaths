@@ -9,7 +9,7 @@ class VerifyOtpController extends GetxController {
   final otpController = TextEditingController();
   final isLoading = false.obs;
 
-  late final String email; // assigned from arguments
+  late final String email; // assigned from argumentslate final String email; // assigned from arguments
 
   @override
   void onInit() {
