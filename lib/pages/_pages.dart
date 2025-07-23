@@ -4,7 +4,8 @@ import 'dart:math';
 import 'dart:math' as developer;
 
 import 'package:awesome_calendart/awesome_calendart.dart';
-import 'package:country_list/country_list.dart';
+
+import 'package:country_names/country_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ import 'package:goliaths/pages/onboard/controllers/ai_type_controller.dart';
 import 'package:goliaths/pages/onboard/controllers/dob_controller.dart';
 import 'package:goliaths/pages/settings/controllers/ProfileController.dart';
 import 'package:goliaths/pages/settings/controllers/birthdate_controller.dart';
+
 
 import 'package:goliaths/routes.dart';
 import 'package:goliaths/services_class/shared_preferences_helper.dart';

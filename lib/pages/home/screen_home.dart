@@ -61,6 +61,8 @@ class _ScreenHomeState extends State<ScreenHome> {
 
 
   Widget build(BuildContext context) {
+
+    DateTime? _lastFetched;
     final historyController = Get.put(ControllerHistory());
     final controllerHome = Get.put(ControllerHome());
     final profilecontroller = Get.put(ProfileController());
@@ -68,6 +70,19 @@ class _ScreenHomeState extends State<ScreenHome> {
       color: Color(0xFF222222),
       borderRadius: BorderRadius.circular(26.r),
     );
+
+    @override
+    void didChangeDependencies() {
+      super.didChangeDependencies();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final now = DateTime.now();
+        if (_lastFetched == null || now.difference(_lastFetched!) > Duration(minutes: 5)) {
+          profilecontroller.fetchProfile(); // <- This updates your profile
+          _lastFetched = now;
+        }
+      });
+    }
 
     return Scaffold(
       appBar: HomeAppBar(
