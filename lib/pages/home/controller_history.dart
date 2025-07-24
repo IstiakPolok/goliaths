@@ -26,12 +26,18 @@ class ConversationModel {
 class ControllerHistory extends GetxController {
   RxList<ConversationModel> historyList = <ConversationModel>[].obs;
   RxBool isLoading = false.obs;
-
+  @override
+  void onReady() {
+    super.onReady();
+    fetchHistory(); // ✅ Automatically fetch latest history every time controller is ready
+  }
   @override
   void onInit() {
     fetchHistory();
     super.onInit();
   }
+
+
 
   Future<void> fetchHistory() async {
     isLoading.value = true;

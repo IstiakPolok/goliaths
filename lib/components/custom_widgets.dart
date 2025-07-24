@@ -119,16 +119,19 @@ class ChatItemView extends StatelessWidget {
           color: isUser ? goliathsTheme.chatBubble1 : goliathsTheme.chatBubble2,
           borderRadius: isUser ? _getUserBorderRadius() : _getAiBorderRadius(),
         ),
-        width: 0.8.sw,
+        //width: 0.8.sw,
         padding: EdgeInsets.all(16).w,
-        child: Text(
-          text,
-          style: goliathsTypography.screenText.copyWith(
-            color:
-            isUser
-                ? goliathsTheme.onChatBubble1
-                : goliathsTheme.onChatBubble2,
+        child: MarkdownBody(
+          data: text,
+          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+            p: goliathsTypography.screenText.copyWith(
+              color: isUser ? Colors.white : Colors.black,
+            ),
           ),
+          selectable: true,
+          onTapLink: (text, href, title) {
+            if (href != null) launchUrl(Uri.parse(href));
+          },
         ),
       ),
     );
@@ -232,6 +235,8 @@ class _ChatInputBoxState extends State<ChatInputBox> {
       onError: (error) => debugPrint('❌ Error: ${error.errorMsg}'),
       // ❌ NO onResult here — not supported
     );
+
+
 
     if (available) {
       debugPrint('✅ Speech is available');

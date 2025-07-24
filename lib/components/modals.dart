@@ -302,7 +302,7 @@ class ModalFriendBirthDate extends StatefulWidget {
 
 class _ModalFriendBirthDateState extends State<ModalFriendBirthDate> {
   final _nameController = TextEditingController();
-  String _relation = 'Family';
+  String? _relation;
   DateTime? _dob;
 
   InputDecoration _inputDecorTop({required String hint}) {
@@ -425,6 +425,7 @@ class _ModalFriendBirthDateState extends State<ModalFriendBirthDate> {
                 onChanged: (value) {
                   if (value != null) setState(() => _relation = value);
                 },
+                hint: Text("Select Relation", style: goliathsTypography.screenText),
               ),
             ),
             Container(

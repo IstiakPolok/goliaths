@@ -8,6 +8,10 @@ class ScreenHistory extends GetView<ControllerHistory> {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchHistory(); // ⬅️ Triggers history refresh
+    });
     return Scaffold(
       appBar: ChildPageAppBar(title: "History"),
       body: SafeArea(

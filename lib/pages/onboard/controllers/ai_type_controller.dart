@@ -35,8 +35,12 @@ class AiTypeController extends GetxController {
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200 && data['conversation_id'] != null) {
+      if (response.statusCode == 201 && data['conversation_id'] != null) {
         print("✅ Success: ${data['message']}");
+
+        // Save selected mode to SharedPreferences
+        await SharedPreferencesHelper.saveSelectedAiMode(mode);
+
         Get.snackbar("Success", data['message'] ?? "Mode selected");
       } else {
         print("❌ API Error: ${data['message']}");
@@ -50,4 +54,5 @@ class AiTypeController extends GetxController {
       print("🔄 Loading Finished");
     }
   }
+
 }

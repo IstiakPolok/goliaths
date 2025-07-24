@@ -41,7 +41,9 @@ class ScreenPasswordChangeSuccess extends StatelessWidget {
                   width: 0.7.sw,
                   child: CustomElevatedButton(
                     text: "Back To Login",
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.offAll(ScreenLogin());
+                    },
                     isFullWidth: true,
                   ),
                 ),

@@ -113,30 +113,30 @@ class ScreenLogin extends StatelessWidget {
               isLoading: controller.isLoading.value,
             )),
 
-            Column(
-              children: [
-                24.verticalSpace,
-                Text(
-                  "or continue with",
-                  style: goliathsTypography.screenText.copyWith(
-                    color: goliathsTheme.textOnPrimary.withValues(alpha: 0.7),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                12.verticalSpace,
-                Center(
-                  // Google/Social login ==========================
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: SvgPicture.asset(
-                      "assets/icons/google.svg",
-                      height: 32.h,
-                      width: 32.h,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            // Column(
+            //   children: [
+            //     24.verticalSpace,
+            //     Text(
+            //       "or continue with",
+            //       style: goliathsTypography.screenText.copyWith(
+            //         color: goliathsTheme.textOnPrimary.withValues(alpha: 0.7),
+            //       ),
+            //       textAlign: TextAlign.center,
+            //     ),
+            //     12.verticalSpace,
+            //     Center(
+            //       // Google/Social login ==========================
+            //       child: GestureDetector(
+            //         onTap: () {},
+            //         child: SvgPicture.asset(
+            //           "assets/icons/google.svg",
+            //           height: 32.h,
+            //           width: 32.h,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
