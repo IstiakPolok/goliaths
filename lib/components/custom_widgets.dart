@@ -119,16 +119,19 @@ class ChatItemView extends StatelessWidget {
           color: isUser ? goliathsTheme.chatBubble1 : goliathsTheme.chatBubble2,
           borderRadius: isUser ? _getUserBorderRadius() : _getAiBorderRadius(),
         ),
-        width: 0.8.sw,
+        //width: 0.8.sw,
         padding: EdgeInsets.all(16).w,
-        child: Text(
-          text,
-          style: goliathsTypography.screenText.copyWith(
-            color:
-            isUser
-                ? goliathsTheme.onChatBubble1
-                : goliathsTheme.onChatBubble2,
+        child: MarkdownBody(
+          data: text,
+          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+            p: goliathsTypography.screenText.copyWith(
+              color: isUser ? Colors.white : Colors.black,
+            ),
           ),
+          selectable: true,
+          onTapLink: (text, href, title) {
+            if (href != null) launchUrl(Uri.parse(href));
+          },
         ),
       ),
     );
@@ -210,6 +213,58 @@ class ChatInputBox extends StatefulWidget {
 
 class _ChatInputBoxState extends State<ChatInputBox> {
   final TextEditingController _controller = TextEditingController();
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+
+  Future<void> _startListening() async {
+    var status = await Permission.microphone.request();
+    if (!status.isGranted) {
+      debugPrint('❌ Microphone permission not granted');
+      return;
+    }
+
+    bool available = await _speech.initialize(
+      onStatus: (status) => debugPrint('🎙 Status: $status'),
+      onError: (error) => debugPrint('❌ Error: ${error.errorMsg}'),
+      // ❌ NO onResult here — not supported
+    );
+
+
+
+    if (available) {
+      debugPrint('✅ Speech is available');
+      setState(() => _isListening = true);
+
+      _speech.listen(
+        localeId: 'en_US',
+        listenMode: stt.ListenMode.confirmation,
+        onResult: (result) {
+          debugPrint('🗣 Speech-to-Text: ${result.recognizedWords}');
+          _controller.text = result.recognizedWords;
+        },
+      );
+    } else {
+      debugPrint('❌ Speech not available');
+    }
+  }
+
+
+  void _stopListening() async {
+    if (_isListening) {
+      await _speech.stop();
+      _isListening = false;
+      debugPrint('🛑 Stopped listening');
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -241,14 +296,16 @@ class _ChatInputBoxState extends State<ChatInputBox> {
           SizedBox(width: widget.gap),
 
           // Voice Button
-          InkWell(
-            splashColor: goliathsTheme.primary.withValues(alpha: 0.05),
-            onTap: () {},
+          GestureDetector(
+            onTapDown: (_) => _startListening(),
+            onTapUp: (_) => _stopListening(),
+            onTapCancel: _stopListening,
             child: _iconButton(
               icon: SvgAssetLoader("assets/icons/mic.svg"),
               color: goliathsTheme.primary,
             ),
           ),
+
           SizedBox(width: widget.gap),
           InkWell(
             onTap: () {

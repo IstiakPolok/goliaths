@@ -51,7 +51,9 @@ class ScreenRegister extends StatelessWidget {
                         style: goliathsTypography.screenText.copyWith(
                           color: goliathsTheme.accent,
                         ),
-                        recognizer: TapGestureRecognizer()..onTap = () {},
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          Get.offNamed(AppRoutes.login);
+                        },
                       ),
                     ],
                   ),

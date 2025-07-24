@@ -52,9 +52,18 @@ class ControllerHome extends GetxController {
 
   var isLoading = false.obs;
 
-  Future<void> selectModeAndStartChat(String mode) async {
+  Future<void> selectModeAndStartChat() async {
     try {
       isLoading.value = true;
+
+      // Get mode from SharedPreferences
+      final String? mode = await SharedPreferencesHelper.getSelectedAiMode();
+      if (mode == null || mode.isEmpty) {
+        Get.snackbar("Error", "No AI mode selected.");
+        isLoading.value = false;
+        return;
+      }
+
       final token = await SharedPreferencesHelper.getAccessToken();
       final url = Uri.parse("${Urls.baseUrl}/conversations/select_mode/");
 
@@ -212,7 +221,7 @@ class ControllerHome extends GetxController {
         // Typing effect
         final buffer = StringBuffer();
         for (int i = 0; i < aiResponse.length; i++) {
-          await Future.delayed(const Duration(milliseconds: 20));
+          await Future.delayed(const Duration(milliseconds: 5));
           buffer.write(aiResponse[i]);
           aiLoaderMsg.text = buffer.toString();
           chatMessages.refresh();

@@ -13,9 +13,16 @@ class ScreenFriendsBirth extends StatefulWidget {
 
 class _ScreenFriendsBirthState extends State<ScreenFriendsBirth> {
   final controller = Get.find<ControllerBirthDay>();
+  bool _didRefresh = false;
 
   @override
   Widget build(BuildContext context) {
+    if (!_didRefresh) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.fetchFriendsBirthdays(); // force refresh
+      });
+      _didRefresh = true; // prevent repeated fetches
+    }
     final isSearching = controller.searchController.text.trim().isNotEmpty;
 
     return Scaffold(

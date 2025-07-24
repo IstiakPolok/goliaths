@@ -51,18 +51,32 @@ class _ScreenHomeState extends State<ScreenHome> {
     final index = today.day % dailyQuotes.length; // cycles through quotes each day
     return dailyQuotes[index];
   }
-
+  late final ProfileController profilecontroller;
+  late final ControllerHistory historyController;
 
   @override
   void initState() {
     super.initState();
+    profilecontroller = Get.put(ProfileController());
+    profilecontroller.fetchProfile();
+
+
+    historyController = Get.put(ControllerHistory());
+    historyController.fetchHistory(); // ✅ Up-to-date list
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    historyController.fetchHistory(); // ✅ Refresh when screen is re-displayed
+  }
+
 
 
 
   Widget build(BuildContext context) {
 
-    DateTime? _lastFetched;
+
     final historyController = Get.put(ControllerHistory());
     final controllerHome = Get.put(ControllerHome());
     final profilecontroller = Get.put(ProfileController());
@@ -71,24 +85,11 @@ class _ScreenHomeState extends State<ScreenHome> {
       borderRadius: BorderRadius.circular(26.r),
     );
 
-    @override
-    void didChangeDependencies() {
-      super.didChangeDependencies();
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final now = DateTime.now();
-        if (_lastFetched == null || now.difference(_lastFetched!) > Duration(minutes: 5)) {
-          profilecontroller.fetchProfile(); // <- This updates your profile
-          _lastFetched = now;
-        }
-      });
-    }
 
     return Scaffold(
       appBar: HomeAppBar(
-        title:
-            "Good Morning, ${profilecontroller.profile.value?.name ?? 'Guys'}",
-        isButton: false,
+
       ),
 
       bottomNavigationBar: BottomBar(selectedIndex: 0),
@@ -235,7 +236,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              controllerHome.selectModeAndStartChat("friend");
+                              controllerHome.selectModeAndStartChat();
                             },
 
                             child: Container(
@@ -322,30 +323,28 @@ class _ScreenHomeState extends State<ScreenHome> {
               }
 
               return Column(
-                children:
-                    items.mapIndexed((index, item) {
-                      final title =
-                          item.title?.isNotEmpty == true
-                              ? item.title!
-                              : item.mode?.isNotEmpty == true
-                              ? item.mode!
-                              : "Untitled";
+                children: items.mapIndexed((index, item) {
+                  final title = item.title?.isNotEmpty == true
+                      ? item.title!
+                      : item.mode?.isNotEmpty == true
+                      ? item.mode!
+                      : "Untitled";
 
-                      return HistoryItem(
-                        key: ValueKey(item.id),
-                        title: title,
-                        icon: SvgAssetLoader(
-                          "assets/icons/history_${(index % 2) + 1}.svg",
-                        ),
-                        onClick:
-                            () => Get.toNamed(
-                              AppRoutes.chat,
-                              arguments: {'id': item.id, 'title': title},
-                            ),
-                      );
-                    }).toList(),
+                  return HistoryItem(
+                    key: ValueKey(item.id),
+                    title: title,
+                    icon: SvgAssetLoader(
+                      "assets/icons/history_${(index % 2) + 1}.svg",
+                    ),
+                    onClick: () => Get.toNamed(
+                      AppRoutes.chat,
+                      arguments: {'id': item.id, 'title': title},
+                    ),
+                  );
+                }).toList(),
               );
             }),
+
 
             16.verticalSpace,
           ],

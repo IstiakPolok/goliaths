@@ -13,6 +13,7 @@ class SharedPreferencesHelper {
   static const String _isWelcomeDialogShownKey =
       'isDriverVerificationDialogShown';
   static const String _subscriptionIdKey = 'subscriptionId';
+  static const String _selectedAiModeKey = 'selectedAiMode';
 
   // Save categories (id and name only)
   static Future<void> saveCategories(
@@ -63,10 +64,10 @@ class SharedPreferencesHelper {
   // Clear access token
   static Future<void> clearAllData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey); // Clear the token
-    await prefs.remove(_selectedRoleKey); // Clear the role
-    await prefs.remove('isLogin'); // Clear the login status
+    await prefs.clear(); // Clear all stored keys and values
+    print("✅ All shared preferences cleared.");
   }
+
 
   // Retrieve selected role
   static Future<String?> getSelectedRole() async {
@@ -108,9 +109,10 @@ class SharedPreferencesHelper {
   }
 
   static Future<void> logoutUser() async {
-    await clearAllData();
+    await clearAllData(); // clears all preferences
     Get.offAllNamed(AppRoutes.login);
   }
+
 
   static const String _userIdKey = 'userId';
 
@@ -125,5 +127,18 @@ class SharedPreferencesHelper {
   static Future<String?> getUserId() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_userIdKey);
+  }
+  
+
+  static Future<void> saveSelectedAiMode(String mode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_selectedAiModeKey, mode);
+    print("🧠 AI Mode saved: $mode");
+  }
+
+// Retrieve selected AI mode
+  static Future<String?> getSelectedAiMode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_selectedAiModeKey);
   }
 }

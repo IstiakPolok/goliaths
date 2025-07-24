@@ -38,12 +38,10 @@ class OnboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 /// Home Bar
 /// ****************************************************************************
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final String title;
   final bool isButton;
 
   const HomeAppBar({
     super.key,
-    this.title = "Breaking Goliaths",
     this.isButton = true,
   });
 
@@ -84,26 +82,44 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     style: goliathsTypography.screenText,
                   ),
                 ),
-                if (widget.isButton)
-                  CustomButtonSmall(
-                    text: "Donate",
-                    onPressed: () {
-                      Get.toNamed(AppRoutes.donationHome);
-                    },
-                  ),
+                // if (widget.isButton)
+                //   CustomButtonSmall(
+                //     text: "Donate",
+                //     onPressed: () {
+                //       Get.toNamed(AppRoutes.donationHome);
+                //     },
+                //   ),
               ],
             ),
-            Text(
-              widget.title,
-              style: goliathsTypography.screenHeading,
-              textAlign: TextAlign.start,
-            ),
+            Obx(() {
+              final name = Get.find<ProfileController>().profile.value?.firstName ?? 'Guys';
+
+              // Get current hour
+              final hour = DateTime.now().hour;
+              String greeting;
+
+              if (hour >= 5 && hour < 12) {
+                greeting = "Good Morning";
+              } else if (hour >= 12 && hour < 17) {
+                greeting = "Good Afternoon";
+              } else {
+                greeting = "Good Evening";
+              }
+
+              return Text(
+                "$greeting, $name",
+                style: goliathsTypography.screenHeading,
+                textAlign: TextAlign.start,
+              );
+            }),
+
           ],
         ),
       ),
     );
   }
 }
+
 
 /// ****************************************************************************
 /// Other Bar
@@ -212,7 +228,7 @@ class BottomBar extends StatelessWidget {
               onClick: () {
                 if (selectedIndex == 1) return;
                 // Get.toNamed(AppRoutes.chat);
-                controllerHome.selectModeAndStartChat("friend");
+                controllerHome.selectModeAndStartChat();
               },
             ),
             _BottomBarItem(
