@@ -207,7 +207,7 @@ class BirthdayItemWidget extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Text(
-                    "Birthday: ${item.birthday}",
+                      "Birthday: ${item.formattedDate}",
                     style: goliathsTypography.screenText.copyWith(
                       color: goliathsTheme.text.withValues(alpha: 0.8),
                       fontSize: 13.sp,

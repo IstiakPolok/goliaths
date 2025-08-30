@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = 'http://10.10.13.16:9100/api';
+  static const String baseUrl = 'https://11214f5e4967.ngrok-free.app/api';
 
   static const String login = '$baseUrl/auth/login/';
   static const String signup = '$baseUrl/auth/signup/';
@@ -12,6 +12,7 @@ class Urls {
   static const String privacy = '$baseUrl/privacy/';
   static const String terms = '$baseUrl/terms/';
   static const String planlist = '$baseUrl/plans/';
+  static const String friends = '$baseUrl/friends/';
 
   static const String profileupdate = '$baseUrl/auth/profile/';
 

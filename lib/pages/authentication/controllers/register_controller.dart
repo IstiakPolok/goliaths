@@ -56,10 +56,14 @@ class RegisterController extends GetxController {
 
       final registerData = jsonDecode(registerResponse.body);
 
-      if (registerResponse.statusCode == 200 || registerResponse.statusCode == 201) {
+      if (registerResponse.statusCode == 200 ||
+          registerResponse.statusCode == 201) {
         print("🎉 Registration successful");
 
-        Get.snackbar("Success", registerData["message"] ?? "User registered successfully");
+        Get.snackbar(
+          "Success",
+          registerData["message"] ?? "User registered successfully",
+        );
 
         /// 🔁 Call the send-verification-otp API
         final otpUrl = Uri.parse(Urls.signupotp);
@@ -91,7 +95,10 @@ class RegisterController extends GetxController {
         }
       } else {
         print("❌ Registration failed: ${registerData["message"]}");
-        Get.snackbar("Failed", registerData["message"] ?? "Registration failed");
+        Get.snackbar(
+          "Failed",
+          registerData["message"] ?? "Registration failed",
+        );
       }
     } catch (e) {
       print("🔥 Exception during registration: $e");

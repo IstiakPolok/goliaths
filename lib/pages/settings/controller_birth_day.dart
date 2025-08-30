@@ -14,6 +14,14 @@ class BirthdayItem {
   });
 
   DateTime get parsedDate => DateTime.tryParse(birthday) ?? DateTime(1900);
+
+  String get formattedDate {
+    final date = parsedDate;
+    final day = date.day.toString().padLeft(2, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final year = date.year.toString();
+    return "$month-$day-$year";
+  }
 }
 
 
@@ -129,7 +137,7 @@ class ControllerBirthDay extends GetxController {
 
     for (var item in allBirthdays) {
       final date = item.parsedDate;
-      final birthdayThisYear = DateTime(today.year, date.month, date.day);
+      final birthdayThisYear = DateTime(date.day, date.month, today.year);
 
       if (birthdayThisYear.month == today.month &&
           birthdayThisYear.day == today.day) {

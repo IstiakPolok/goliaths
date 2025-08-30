@@ -37,7 +37,9 @@ class ControllerSubscription extends GetxController {
 
     try {
       final token = await SharedPreferencesHelper.getAccessToken();
-      print('DEBUG: Access token: ${token?.isNotEmpty == true ? "✔ Available" : "❌ Missing"}');
+      print(
+        'DEBUG: Access token: ${token?.isNotEmpty == true ? "✔ Available" : "❌ Missing"}',
+      );
 
       if (token == null || token.isEmpty) {
         Get.snackbar("Error", "Access token not found. Please log in again.");
@@ -65,7 +67,9 @@ class ControllerSubscription extends GetxController {
 
         for (var plan in plans) {
           if (plan['id'] == currentSubscribedPlanId.value) {
-            print("🎯 MATCH FOUND: '${plan['name']}' (ID: ${plan['id']}) is the current subscription.");
+            print(
+              "🎯 MATCH FOUND: '${plan['name']}' (ID: ${plan['id']}) is the current subscription.",
+            );
           }
         }
       } else {
@@ -78,7 +82,6 @@ class ControllerSubscription extends GetxController {
       isLoading.value = false;
     }
   }
-
 
   /// Creates a checkout session for a selected plan
   Future<void> createCheckoutSession(Map<String, dynamic> plan) async {
@@ -112,8 +115,7 @@ class ControllerSubscription extends GetxController {
 
       print("DEBUG: Checkout request body => ${jsonEncode(bodyData)}");
 
-      final url =
-          'http://10.10.13.16:9100/api/plans/$planId/create_checkout_session/';
+      final url = '${Urls.baseUrl}/plans/$planId/create_checkout_session/';
       print("DEBUG: Full checkout URL => $url");
 
       final response = await http.post(

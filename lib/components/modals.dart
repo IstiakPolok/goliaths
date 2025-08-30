@@ -425,7 +425,10 @@ class _ModalFriendBirthDateState extends State<ModalFriendBirthDate> {
                 onChanged: (value) {
                   if (value != null) setState(() => _relation = value);
                 },
-                hint: Text("Select Relation", style: goliathsTypography.screenText),
+                hint: Text(
+                  "Select Relation",
+                  style: goliathsTypography.screenText,
+                ),
               ),
             ),
             Container(
@@ -444,7 +447,7 @@ class _ModalFriendBirthDateState extends State<ModalFriendBirthDate> {
                     controller: TextEditingController(
                       text:
                           _dob != null
-                              ? "${_dob!.year}-${_dob!.month.toString().padLeft(2, '0')}-${_dob!.day.toString().padLeft(2, '0')}"
+                              ? "${_dob!.month.toString().padLeft(2, '0')}-${_dob!.day.toString().padLeft(2, '0')}-${_dob!.year}"
                               : '',
                     ),
                     decoration: _inputDecorBottom(hint: "Date Of Birth"),
@@ -503,7 +506,7 @@ class _ModalFriendBirthDateState extends State<ModalFriendBirthDate> {
       final token = await SharedPreferencesHelper.getAccessToken();
 
       final response = await http.post(
-        Uri.parse("${Urls.baseUrl}/friends/"),
+        Uri.parse(Urls.friends),
         headers: {
           "Authorization": "JWT $token",
           "Content-Type": "application/json",

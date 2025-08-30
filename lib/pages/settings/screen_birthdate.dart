@@ -11,7 +11,21 @@ class ScreenBirthdate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ChildPageAppBar(title: "Birthdate"),
+      appBar: AppBar(
+        title: Text("Birthdate"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 24.0),
+            child: CustomButtonSmall(
+              text: "Donate",
+              onPressed: () {
+                Get.toNamed(AppRoutes.donationAmount);
+              },
+            ),
+          ),
+        ],
+      ),
+
       body: SafeArea(
         top: false,
         child: Obx(() {
@@ -34,7 +48,7 @@ class ScreenBirthdate extends StatelessWidget {
                       ),
                     ),
                     CustomButtonSmall(
-                      text: "Add Birthday",
+                      text: "Add Friend's Birthday",
                       onPressed: _showFriendAddBirth,
                     ),
                   ],

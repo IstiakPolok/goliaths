@@ -194,43 +194,59 @@ class _ScreenHomeState extends State<ScreenHome> {
                     flex: 38,
                     child: Column(
                       children: [
-                        // Right Top Card
                         Expanded(
-                          child: GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.donationAmount),
-                            child: Container(
-                              padding: EdgeInsets.all(16.r),
-                              decoration: cardDecoration.copyWith(
-                                color: Color(0xFFB7B4B4),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // Ai Icon
-                                  Start(
-                                    child: SvgPicture.asset(
-                                      "assets/icons/doller_card.svg",
-                                      height: 22.h,
-                                      width: 22.h,
-                                    ),
-                                  ),
-                                  // Bottom Section Of Cake
-                                  Text(
-                                    "Start\nDonation",
-                                    style: goliathsTypography.screenText
-                                        .copyWith(
-                                          color: goliathsTheme.text,
-                                          fontSize: 13.sp,
-                                        ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
+                          child: Container(
+                            decoration: cardDecoration.copyWith(
+                              color: const Color(0xFFB7B4B4),
+                              image: const DecorationImage(
+                                image: AssetImage("assets/images/dummy.jpg"), // ← Your background image
+                                fit: BoxFit.cover, // Makes the image fill the entire container
                               ),
                             ),
+                            padding: EdgeInsets.all(16.r),
+                            // Optional child here if needed, or leave empty for just image background
+                            child: null, // ← Replace with widgets if you want to overlay content
                           ),
                         ),
+
+
+                        // Right Top Card
+                        // Expanded(
+                        //   child: GestureDetector(
+                        //     onTap: () => Get.toNamed(AppRoutes.donationAmount),
+                        //     child: Container(
+                        //       padding: EdgeInsets.all(16.r),
+                        //       decoration: cardDecoration.copyWith(
+                        //         color: Color(0xFFB7B4B4),
+                        //       ),
+                        //       child: Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.stretch,
+                        //         mainAxisAlignment:
+                        //             MainAxisAlignment.spaceBetween,
+                        //         children: [
+                        //           // Ai Icon
+                        //           Start(
+                        //             child: SvgPicture.asset(
+                        //               "assets/icons/doller_card.svg",
+                        //               height: 22.h,
+                        //               width: 22.h,
+                        //             ),
+                        //           ),
+                        //           // Bottom Section Of Cake
+                        //           Text(
+                        //             "Start\nDonation",
+                        //             style: goliathsTypography.screenText
+                        //                 .copyWith(
+                        //                   color: goliathsTheme.text,
+                        //                   fontSize: 13.sp,
+                        //                 ),
+                        //             textAlign: TextAlign.start,
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(height: 12.w),
                         // Right Bottom Card
                         Expanded(

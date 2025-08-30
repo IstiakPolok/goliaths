@@ -61,7 +61,8 @@ class ScreenProfile extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _infoRow('Date of birth', profile.dateOfBirth),
+                          _infoRow('Date of birth', profile.formattedDateOfBirth),
+
                           Padding(
                             padding: EdgeInsets.only(right: 16.r),
                             child: SvgPicture.asset(
