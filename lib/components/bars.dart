@@ -82,13 +82,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     style: goliathsTypography.screenText,
                   ),
                 ),
-                // if (widget.isButton)
-                //   CustomButtonSmall(
-                //     text: "Donate",
-                //     onPressed: () {
-                //       Get.toNamed(AppRoutes.donationHome);
-                //     },
-                //   ),
+                if (widget.isButton)
+                  CustomButtonSmall(
+                    text: "Donate",
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.donationAmount);
+                    },
+                  ),
               ],
             ),
             Obx(() {
@@ -183,6 +183,16 @@ class ChildPageAppBar extends StatelessWidget implements PreferredSizeWidget {
             title,
             style: goliathsTypography.screenText.copyWith(color: color),
           ),
+          Spacer(),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: CustomButtonSmall(
+          //     text: "Donate",
+          //     onPressed: () {
+          //       Get.toNamed(AppRoutes.donationAmount);
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );

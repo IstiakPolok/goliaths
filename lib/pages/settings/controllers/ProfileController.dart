@@ -32,6 +32,23 @@ class ProfileModel {
 
   String get avatarUrl => profilePicture ?? '';
 
+
+
+
+
+  String get formattedDateOfBirth {
+    try {
+      final date = DateTime.parse(dateOfBirth);
+      final month = date.month.toString().padLeft(2, '0');
+      final day = date.day.toString().padLeft(2, '0');
+      final year = date.year.toString(); // ← full YYYY
+      return "$month-$day-$year";
+    } catch (e) {
+      return dateOfBirth;
+    }
+  }
+
+
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
       id: json['id'] ?? 0,
