@@ -41,7 +41,7 @@ class ScreenBirthdate extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Hey ${controller.firstName.value}!",
+                      "Hey ${controller.full_name.value.split(' ').first}!",
                       style: goliathsTypography.screenTitle.copyWith(
                         color: goliathsTheme.accent,
                         fontSize: 22.sp,

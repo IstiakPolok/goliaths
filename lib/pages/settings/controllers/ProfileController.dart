@@ -8,8 +8,7 @@ import 'package:goliaths/network_caller/endpoints.dart';
 class ProfileModel {
   final int id;
   final String email;
-  final String firstName;
-  final String lastName;
+  final String full_name;
   final String phoneNumber;
   final bool isVerified;
   final String? profilePicture;
@@ -19,8 +18,7 @@ class ProfileModel {
   ProfileModel({
     required this.id,
     required this.email,
-    required this.firstName,
-    required this.lastName,
+    required this.full_name,
     required this.phoneNumber,
     required this.isVerified,
     required this.profilePicture,
@@ -28,13 +26,9 @@ class ProfileModel {
     required this.age,
   });
 
-  String get name => '$firstName $lastName';
+  String get name => full_name;
 
   String get avatarUrl => profilePicture ?? '';
-
-
-
-
 
   String get formattedDateOfBirth {
     try {
@@ -48,13 +42,11 @@ class ProfileModel {
     }
   }
 
-
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
       id: json['id'] ?? 0,
       email: json['email'] ?? '',
-      firstName: json['first_name'] ?? '',
-      lastName: json['last_name'] ?? '',
+      full_name: json['full_name'] ?? '',
       phoneNumber: json['phone_number'] ?? '',
       isVerified: json['is_verified'] ?? false,
       profilePicture: json['profile_picture'], // nullable, okay

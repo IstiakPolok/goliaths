@@ -40,10 +40,7 @@ class OnboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool isButton;
 
-  const HomeAppBar({
-    super.key,
-    this.isButton = true,
-  });
+  const HomeAppBar({super.key, this.isButton = true});
 
   @override
   State<HomeAppBar> createState() => _HomeAppBarState();
@@ -92,7 +89,12 @@ class _HomeAppBarState extends State<HomeAppBar> {
               ],
             ),
             Obx(() {
-              final name = Get.find<ProfileController>().profile.value?.firstName ?? 'Guys';
+              final fullName =
+                  Get.find<ProfileController>().profile.value?.full_name ??
+                  'Guys';
+
+              // Take only the first word
+              final firstName = fullName.split(" ").first;
 
               // Get current hour
               final hour = DateTime.now().hour;
@@ -107,19 +109,17 @@ class _HomeAppBarState extends State<HomeAppBar> {
               }
 
               return Text(
-                "$greeting, $name",
+                "$greeting, $firstName",
                 style: goliathsTypography.screenHeading,
                 textAlign: TextAlign.start,
               );
             }),
-
           ],
         ),
       ),
     );
   }
 }
-
 
 /// ****************************************************************************
 /// Other Bar
