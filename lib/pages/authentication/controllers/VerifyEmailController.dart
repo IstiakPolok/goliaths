@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:Goliaths/pages/_pages.dart';
 import 'package:get/get.dart';
-import 'package:goliaths/pages/_pages.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import '../../../services_class/shared_preferences_helper.dart'; // if you want to store anything
+// if you want to store anything
 import '../../../network_caller/endpoints.dart'; // assuming baseUrl is defined here
 
 class VerifyEmailController extends GetxController {

@@ -59,7 +59,7 @@ class _ScreenFriendsBirthState extends State<ScreenFriendsBirth> {
                       SectionHeader(sectionTitle: "Search Results"),
                       ...controller.filteredFriends
                           .map((item) => BirthdayItemWidget(item: item))
-                          .toList(),
+                          ,
                       28.verticalSpace,
                     ]),
                   );
@@ -70,21 +70,21 @@ class _ScreenFriendsBirthState extends State<ScreenFriendsBirth> {
                         SectionHeader(sectionTitle: "Birthdays Today"),
                         ...controller.todays
                             .map((item) => BirthdayItemWidget(item: item))
-                            .toList(),
+                            ,
                         12.verticalSpace,
                       ],
                       if (controller.upcomings.isNotEmpty) ...[
                         SectionHeader(sectionTitle: "Upcoming Birthdays"),
                         ...controller.upcomings
                             .map((item) => BirthdayItemWidget(item: item))
-                            .toList(),
+                            ,
                         12.verticalSpace,
                       ],
                       if (controller.filteredFriends.isNotEmpty) ...[
                         SectionHeader(sectionTitle: "All Friends"),
                         ...controller.filteredFriends
                             .map((item) => BirthdayItemWidget(item: item))
-                            .toList(),
+                            ,
                         28.verticalSpace,
                       ],
                     ]),

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:Goliaths/model/_models.dart';
 import 'package:flutter/material.dart'
     show
         BuildContext,
@@ -14,7 +15,6 @@ import 'package:flutter/material.dart'
         ThemeData,
         CardThemeData;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:goliaths/model/_models.dart';
 
 final goliathsTheme = GoliathsTheme(
   primary: Color(0xFF302E2E),
@@ -89,7 +89,7 @@ ThemeData createGoliathsTheme(BuildContext context) {
       // Customize onError color
       surface: goliathsTheme.background,
       onSurface: goliathsTheme.text,
-    ).copyWith(background: goliathsTheme.background),
+    ).copyWith(surface: goliathsTheme.background),
     // You can extend this to more custom widgets and properties as needed
   );
 }

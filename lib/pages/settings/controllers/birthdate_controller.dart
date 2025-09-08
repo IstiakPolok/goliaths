@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'package:Goliaths/network_caller/endpoints.dart';
+import 'package:Goliaths/services_class/shared_preferences_helper.dart';
 import 'package:get/get.dart';
-import 'package:goliaths/network_caller/endpoints.dart';
-import 'package:goliaths/services_class/shared_preferences_helper.dart';
+
 import 'package:http/http.dart' as http;
 
 class BirthdateController extends GetxController {
   var isLoading = false.obs;
-  var firstName = ''.obs;
+  var full_name = ''.obs;
   var dateOfBirth = ''.obs;
   var remainingDays = 0.obs;
 
@@ -38,9 +39,9 @@ class BirthdateController extends GetxController {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        firstName.value = data['first_name'] ?? '';
+        full_name.value = data['full_name'] ?? '';
         dateOfBirth.value = data['date_of_birth'] ?? '';
-        print('👤 Name: $firstName, 🎂 DOB: $dateOfBirth');
+        print('👤 Name: $full_name, 🎂 DOB: $dateOfBirth');
 
         remainingDays.value = _calculateRemainingDays(dateOfBirth.value);
         print('📆 Days left until birthday: ${remainingDays.value}');

@@ -44,7 +44,7 @@ class ScreenDonationHome extends GetView<ControllerDonation> {
 
   @override
   Widget build(BuildContext context) {
-    final _padding = EdgeInsets.symmetric(horizontal: 16.sp);
+    final padding = EdgeInsets.symmetric(horizontal: 16.sp);
     return Scaffold(
       appBar: ChildPageAppBar(title: "Fundraising"),
       body: SafeArea(
@@ -52,11 +52,11 @@ class ScreenDonationHome extends GetView<ControllerDonation> {
         child: CustomScrollView(
           slivers: [
             SliverPaddingBoxAdapter(
-              padding: _padding,
+              padding: padding,
               child: _totalFundRaiseCard(),
             ),
             SliverPaddingBoxAdapter(
-              padding: _padding,
+              padding: padding,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -96,7 +96,7 @@ class ScreenDonationHome extends GetView<ControllerDonation> {
 
             Obx(
               () => SliverPaddingListView(
-                padding: _padding,
+                padding: padding,
                 itemCount: controller.donations.length,
                 itemBuilder: (context, index) {
                   return _fundRaiseCard(

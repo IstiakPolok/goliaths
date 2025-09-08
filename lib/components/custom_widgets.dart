@@ -216,7 +216,6 @@ class _ChatInputBoxState extends State<ChatInputBox> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -236,8 +235,6 @@ class _ChatInputBoxState extends State<ChatInputBox> {
       // ❌ NO onResult here — not supported
     );
 
-
-
     if (available) {
       debugPrint('✅ Speech is available');
       setState(() => _isListening = true);
@@ -255,7 +252,6 @@ class _ChatInputBoxState extends State<ChatInputBox> {
     }
   }
 
-
   void _stopListening() async {
     if (_isListening) {
       await _speech.stop();
@@ -263,8 +259,6 @@ class _ChatInputBoxState extends State<ChatInputBox> {
       debugPrint('🛑 Stopped listening');
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -296,15 +290,30 @@ class _ChatInputBoxState extends State<ChatInputBox> {
           SizedBox(width: widget.gap),
 
           // Voice Button
-          GestureDetector(
-            onTapDown: (_) => _startListening(),
-            onTapUp: (_) => _stopListening(),
-            onTapCancel: _stopListening,
-            child: _iconButton(
-              icon: SvgAssetLoader("assets/icons/mic.svg"),
-              color: goliathsTheme.primary,
-            ),
-          ),
+          Obx(() {
+            final expired = Get.find<ProfileController>().isTrialExpired;
+
+            return GestureDetector(
+              onTapDown:
+                  expired
+                      ? (_) {
+                        Get.snackbar(
+                          "Trial Expired",
+                          "Please subscribe to use voice input.",
+                        );
+                      }
+                      : (_) => _startListening(),
+              onTapUp: expired ? null : (_) => _stopListening(),
+              onTapCancel: expired ? null : _stopListening,
+              child: _iconButton(
+                icon: SvgAssetLoader("assets/icons/mic.svg"),
+                color:
+                    expired
+                        ? Colors.grey
+                        : goliathsTheme.primary, // grey if expired
+              ),
+            );
+          }),
 
           SizedBox(width: widget.gap),
           InkWell(
@@ -434,15 +443,15 @@ class _AvatarUploaderState extends State<AvatarUploader> {
           radius: 60.r,
           backgroundColor: Colors.grey[300],
           backgroundImage:
-          _selectedImage != null
-              ? FileImage(_selectedImage!)
-              : (widget.initialImageUrl != null
-              ? NetworkImage(widget.initialImageUrl!)
-              : null),
+              _selectedImage != null
+                  ? FileImage(_selectedImage!)
+                  : (widget.initialImageUrl != null
+                      ? NetworkImage(widget.initialImageUrl!)
+                      : null),
           child:
-          (_selectedImage == null && widget.initialImageUrl == null)
-              ? const Icon(Icons.person, size: 50)
-              : null,
+              (_selectedImage == null && widget.initialImageUrl == null)
+                  ? const Icon(Icons.person, size: 50)
+                  : null,
         ),
         Positioned(
           bottom: 0,
@@ -498,17 +507,17 @@ class SvgCloseButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child:
-        icon != null
-            ? SvgPicture(
-          icon!,
-          height: size,
-          width: size,
-          colorFilter: ColorFilter.mode(
-            iconColor ?? Colors.grey,
-            BlendMode.srcIn,
-          ), // optional color
-        )
-            : Icon(Icons.close, size: size, color: iconColor),
+            icon != null
+                ? SvgPicture(
+                  icon!,
+                  height: size,
+                  width: size,
+                  colorFilter: ColorFilter.mode(
+                    iconColor ?? Colors.grey,
+                    BlendMode.srcIn,
+                  ), // optional color
+                )
+                : Icon(Icons.close, size: size, color: iconColor),
       ),
     );
   }
@@ -675,18 +684,18 @@ class ProgressCirclePainter extends CustomPainter {
 
     // Draw the base black circle
     final basePaint =
-    Paint()
-      ..color = baseColor
-      ..style = PaintingStyle.fill;
+        Paint()
+          ..color = baseColor
+          ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius, basePaint);
 
     // Draw the progress arc (yellow)
     final progressPaint =
-    Paint()
-      ..color = accentColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
+        Paint()
+          ..color = accentColor
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = strokeWidth
+          ..strokeCap = StrokeCap.round;
     final sweepAngle = 2 * math.pi * progress; // Convert progress to radians
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
@@ -699,9 +708,9 @@ class ProgressCirclePainter extends CustomPainter {
     // Draw the accent (yellow) circle on top with padding
     final accentRadius = radius - centerDeduct;
     final accentPaint =
-    Paint()
-      ..color = accentColor
-      ..style = PaintingStyle.fill;
+        Paint()
+          ..color = accentColor
+          ..style = PaintingStyle.fill;
     canvas.drawCircle(center, accentRadius, accentPaint);
 
     // Calculate the position of the small circle at the head of the progress
@@ -714,9 +723,9 @@ class ProgressCirclePainter extends CustomPainter {
 
     // Draw the small black circle at the progress head
     final smallCirclePaint =
-    Paint()
-      ..color = baseColor
-      ..style = PaintingStyle.fill;
+        Paint()
+          ..color = baseColor
+          ..style = PaintingStyle.fill;
     canvas.drawCircle(smallCircleCenter, smallCircleRadius, smallCirclePaint);
 
     // Draw the SVG icon inside the small circle
@@ -811,41 +820,41 @@ class AmountSelector extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children:
-      amounts.map((amount) {
-        final isSelected = selectedAmount == amount;
-        return GestureDetector(
-          onTap: () {
-            onSelected(amount);
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.r),
-              border:
-              isSelected
-                  ? Border.all(color: goliathsTheme.accent, width: 1.5)
-                  : Border.all(color: Colors.grey.shade200, width: 1),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+          amounts.map((amount) {
+            final isSelected = selectedAmount == amount;
+            return GestureDetector(
+              onTap: () {
+                onSelected(amount);
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.r),
+                  border:
+                      isSelected
+                          ? Border.all(color: goliathsTheme.accent, width: 1.5)
+                          : Border.all(color: Colors.grey.shade200, width: 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Text(
-              '\$$amount',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
+                child: Text(
+                  '\$$amount',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
               ),
-            ),
-          ),
-        );
-      }).toList(),
+            );
+          }).toList(),
     );
   }
 }
@@ -868,8 +877,8 @@ class TermsAndPrivacyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle =
-    (style ??
-        TextStyle(fontWeight: FontWeight.normal, color: Colors.white));
+        (style ??
+            TextStyle(fontWeight: FontWeight.normal, color: Colors.white));
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
@@ -883,10 +892,10 @@ class TermsAndPrivacyText extends StatelessWidget {
               decoration: TextDecoration.underline,
             ),
             recognizer:
-            TapGestureRecognizer()
-              ..onTap = () {
-                termClick?.call();
-              },
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    termClick?.call();
+                  },
           ),
           const TextSpan(text: '\nAnd our '),
           TextSpan(
@@ -896,10 +905,10 @@ class TermsAndPrivacyText extends StatelessWidget {
               decoration: TextDecoration.underline,
             ),
             recognizer:
-            TapGestureRecognizer()
-              ..onTap = () {
-                privacyClick?.call();
-              },
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    privacyClick?.call();
+                  },
           ),
         ],
       ),
