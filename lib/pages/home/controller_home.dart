@@ -216,6 +216,16 @@ class ControllerHome extends GetxController {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
+
+        // ✅ Check if error field exists
+        if (data["error"] != null) {
+          final errorMsg = data["error"];
+          aiLoaderMsg.text = "⚠️ $errorMsg";
+          chatMessages.refresh();
+          Get.snackbar("Error", errorMsg);
+          return;
+        }
+
         final aiResponse = data["AI"] ?? "No response";
 
         // Typing effect
@@ -227,9 +237,9 @@ class ControllerHome extends GetxController {
           chatMessages.refresh();
         }
       } else {
-        aiLoaderMsg.text = "⚠️ Failed to get AI response.";
+        aiLoaderMsg.text = "⚠️ Your free trial has expired. Please purchase a subscription to continue chatting.";
         chatMessages.refresh();
-        Get.snackbar("Error", "Message failed to send.");
+        Get.snackbar("Error", "Your free trial has expired. Please purchase a subscription to continue chatting.");
       }
     } catch (e) {
       Get.snackbar("Error", "Something went wrong.");

@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:Goliaths/network_caller/endpoints.dart';
+import 'package:Goliaths/services_class/shared_preferences_helper.dart';
 import 'package:get/get.dart';
-import 'package:goliaths/network_caller/endpoints.dart';
-import 'package:goliaths/services_class/shared_preferences_helper.dart';
+
 import 'package:http/http.dart' as http;
 
 class BirthdateController extends GetxController {

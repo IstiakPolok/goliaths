@@ -1,8 +1,8 @@
+import 'package:Goliaths/pages/_pages.dart';
+import 'package:Goliaths/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:goliaths/pages/_pages.dart';
-import 'package:goliaths/theme.dart';
 
 class AppRoutes extends StatelessWidget {
   const AppRoutes({super.key});

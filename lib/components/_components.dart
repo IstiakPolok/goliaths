@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:math' as math;
 
-import 'package:awesome_calendart/awesome_calendart.dart';
+import 'package:Goliaths/network_caller/endpoints.dart';
+import 'package:Goliaths/pages/_pages.dart';
+import 'package:Goliaths/pages/settings/controllers/ProfileController.dart';
+import 'package:Goliaths/routes.dart';
+import 'package:Goliaths/services_class/shared_preferences_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +16,12 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:goliaths/network_caller/endpoints.dart';
-import 'package:goliaths/pages/_pages.dart';
-import 'package:goliaths/pages/settings/controllers/ProfileController.dart';
-import 'package:goliaths/routes.dart';
-import 'package:goliaths/services_class/shared_preferences_helper.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:lunary/lunary.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:url_launcher/url_launcher.dart';
-
-
 
 import '../theme.dart';
 

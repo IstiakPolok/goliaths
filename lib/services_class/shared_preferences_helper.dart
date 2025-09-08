@@ -1,10 +1,8 @@
 import 'dart:convert';
 
+import 'package:Goliaths/routes.dart';
 import 'package:get/get.dart';
-import 'package:goliaths/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../pages/_pages.dart';
 
 class SharedPreferencesHelper {
   static const String _accessTokenKey = 'token';
@@ -33,8 +31,6 @@ class SharedPreferencesHelper {
     }
     return [];
   }
-
-
 
   static Future<void> saveSubscriptionId(int id) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,7 +63,6 @@ class SharedPreferencesHelper {
     await prefs.clear(); // Clear all stored keys and values
     print("✅ All shared preferences cleared.");
   }
-
 
   // Retrieve selected role
   static Future<String?> getSelectedRole() async {
@@ -113,7 +108,6 @@ class SharedPreferencesHelper {
     Get.offAllNamed(AppRoutes.login);
   }
 
-
   static const String _userIdKey = 'userId';
 
   // Save only the user ID
@@ -128,7 +122,6 @@ class SharedPreferencesHelper {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_userIdKey);
   }
-  
 
   static Future<void> saveSelectedAiMode(String mode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -136,7 +129,7 @@ class SharedPreferencesHelper {
     print("🧠 AI Mode saved: $mode");
   }
 
-// Retrieve selected AI mode
+  // Retrieve selected AI mode
   static Future<String?> getSelectedAiMode() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_selectedAiModeKey);

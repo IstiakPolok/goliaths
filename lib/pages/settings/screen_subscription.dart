@@ -155,7 +155,7 @@ class ScreenSubscription extends GetView<ControllerSubscription> {
                                     cleanedText,
                                     color: goliathsTheme.textOnPrimary,
                                   );
-                                }).toList(),
+                                }),
 
 
 

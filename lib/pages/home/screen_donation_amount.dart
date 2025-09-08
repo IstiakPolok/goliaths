@@ -4,7 +4,7 @@ part of '../_pages.dart';
 /// Donation and organization amount entry
 /// ****************************************************************************
 class ScreenDonationAmount extends GetView<ControllerDonation> {
-  ScreenDonationAmount({super.key});
+  const ScreenDonationAmount({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
+import 'package:Goliaths/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:goliaths/routes.dart';
 
 /* TODO: todos
 * image_picker ios setup

@@ -3,6 +3,19 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:math' as developer;
 
+import 'package:Goliaths/components/_components.dart';
+import 'package:Goliaths/model/_models.dart';
+import 'package:Goliaths/network_caller/endpoints.dart';
+import 'package:Goliaths/pages/authentication/controllers/CreatePasswordController.dart';
+import 'package:Goliaths/pages/authentication/controllers/VerifyEmailController.dart';
+import 'package:Goliaths/pages/authentication/controllers/register_controller.dart';
+import 'package:Goliaths/pages/onboard/controllers/ai_type_controller.dart';
+import 'package:Goliaths/pages/onboard/controllers/dob_controller.dart';
+import 'package:Goliaths/pages/settings/controllers/ProfileController.dart';
+import 'package:Goliaths/pages/settings/controllers/birthdate_controller.dart';
+import 'package:Goliaths/routes.dart';
+import 'package:Goliaths/services_class/shared_preferences_helper.dart';
+import 'package:Goliaths/theme.dart';
 import 'package:awesome_calendart/awesome_calendart.dart';
 
 import 'package:country_names/country_list.dart';
@@ -15,21 +28,7 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:goliaths/components/_components.dart';
-import 'package:goliaths/model/_models.dart';
-import 'package:goliaths/network_caller/endpoints.dart';
-import 'package:goliaths/pages/authentication/controllers/CreatePasswordController.dart';
-import 'package:goliaths/pages/authentication/controllers/VerifyEmailController.dart';
-import 'package:goliaths/pages/authentication/controllers/register_controller.dart';
-import 'package:goliaths/pages/onboard/controllers/ai_type_controller.dart';
-import 'package:goliaths/pages/onboard/controllers/dob_controller.dart';
-import 'package:goliaths/pages/settings/controllers/ProfileController.dart';
-import 'package:goliaths/pages/settings/controllers/birthdate_controller.dart';
 
-
-import 'package:goliaths/routes.dart';
-import 'package:goliaths/services_class/shared_preferences_helper.dart';
-import 'package:goliaths/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:lunary/lunary.dart';
 import 'package:share_plus/share_plus.dart';

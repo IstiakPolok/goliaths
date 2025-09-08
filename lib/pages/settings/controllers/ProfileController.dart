@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:Goliaths/network_caller/endpoints.dart';
+import 'package:Goliaths/services_class/shared_preferences_helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:goliaths/services_class/shared_preferences_helper.dart';
-import 'package:goliaths/network_caller/endpoints.dart';
 
 class ProfileModel {
   final int id;
@@ -15,6 +15,11 @@ class ProfileModel {
   final String dateOfBirth;
   final int age;
 
+  // 🔥 New fields
+  final bool isSubscribed;
+  final String subscriptionType;
+  final bool isFreeTrialExpired;
+
   ProfileModel({
     required this.id,
     required this.email,
@@ -24,6 +29,9 @@ class ProfileModel {
     required this.profilePicture,
     required this.dateOfBirth,
     required this.age,
+    required this.isSubscribed,
+    required this.subscriptionType,
+    required this.isFreeTrialExpired,
   });
 
   String get name => full_name;
@@ -49,9 +57,14 @@ class ProfileModel {
       full_name: json['full_name'] ?? '',
       phoneNumber: json['phone_number'] ?? '',
       isVerified: json['is_verified'] ?? false,
-      profilePicture: json['profile_picture'], // nullable, okay
+      profilePicture: json['profile_picture'],
       dateOfBirth: json['date_of_birth'] ?? '',
       age: json['age'] ?? 0,
+
+      // 🔥 parse new fields
+      isSubscribed: json['is_subscribed'] ?? false,
+      subscriptionType: json['subscription_type'] ?? 'none',
+      isFreeTrialExpired: json['is_free_trial_expired'] ?? true,
     );
   }
 }
@@ -59,6 +72,9 @@ class ProfileModel {
 class ProfileController extends GetxController {
   Rx<ProfileModel?> profile = Rx<ProfileModel?>(null);
   RxBool isLoading = true.obs;
+
+  bool get isTrialExpired => profile.value?.isFreeTrialExpired ?? true;
+  bool get hasSubscription => profile.value?.isSubscribed ?? false;
 
   @override
   void onInit() {
