@@ -93,8 +93,9 @@ class HistoryItem extends StatelessWidget {
 /// ****************************************************************************
 /// Chat Item View (Chat Bubble)
 /// ****************************************************************************
-enum ChatPosition { top, middle, bottom, single }
 
+
+enum ChatPosition { top, middle, bottom, single }
 enum ChatRole { user, ai }
 
 class ChatItemView extends StatelessWidget {
@@ -112,29 +113,90 @@ class ChatItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isUser = role == ChatRole.user;
-    return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isUser ? goliathsTheme.chatBubble1 : goliathsTheme.chatBubble2,
-          borderRadius: isUser ? _getUserBorderRadius() : _getAiBorderRadius(),
-        ),
-        //width: 0.8.sw,
-        padding: EdgeInsets.all(16).w,
-        child: MarkdownBody(
-          data: text,
-          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-            p: goliathsTypography.screenText.copyWith(
-              color: isUser ? Colors.white : Colors.black,
-            ),
+
+    // Bubble widget
+    final bubble = Container(
+      decoration: BoxDecoration(
+        color: isUser ? goliathsTheme.chatBubble1 : goliathsTheme.chatBubble2,
+        borderRadius: isUser ? _getUserBorderRadius() : _getAiBorderRadius(),
+      ),
+      padding: EdgeInsets.all(16).w,
+      child: MarkdownBody(
+        data: text,
+        styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+          p: goliathsTypography.screenText.copyWith(
+            color: isUser ? Colors.white : Colors.black,
           ),
-          selectable: true,
-          onTapLink: (text, href, title) {
-            if (href != null) launchUrl(Uri.parse(href));
-          },
         ),
+        selectable: true,
+        onTapLink: (text, href, title) {
+          if (href != null) launchUrl(Uri.parse(href));
+        },
       ),
     );
+
+    if (isUser) {
+      // User bubble: right-aligned only
+      return Align(
+        alignment: Alignment.centerRight,
+        child: bubble,
+      );
+    } else {
+      // AI bubble: left-aligned with report icon on the right
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(child: bubble),
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(Icons.report, color: Colors.grey),
+                onPressed: () {
+                  // Show confirmation dialog
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Report Message"),
+                      content: Text("Do you really want to report this message?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close dialog
+                          },
+                          child: Text("Cancel"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close dialog
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Message reported successfully."),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.grey,
+                              ),
+                            );
+
+
+                          },
+                          child: Text(
+                            "Report",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+
+          ],
+        ),
+      );
+    }
   }
 
   BorderRadiusGeometry _getUserBorderRadius() {
@@ -197,6 +259,7 @@ class ChatItemView extends StatelessWidget {
     }
   }
 }
+
 
 /// ****************************************************************************
 /// Chat Box Chat Page

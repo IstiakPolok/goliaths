@@ -1,5 +1,5 @@
 class Urls {
-  static const String baseUrl = 'http://10.10.13.16:9630/api';
+  static const String baseUrl = 'https://breakinggoliaths.ai/api';
 
   static const String login = '$baseUrl/auth/login/';
   static const String signup = '$baseUrl/auth/signup/';
