@@ -1,4 +1,5 @@
 class Urls {
+  static const String countries = '$baseUrl/countries/';
   static const String baseUrl = 'https://breakinggoliaths.ai/api';
 
   static const String login = '$baseUrl/auth/login/';

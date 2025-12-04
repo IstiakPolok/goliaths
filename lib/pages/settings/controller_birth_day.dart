@@ -24,14 +24,12 @@ class BirthdayItem {
   }
 }
 
-
 class ControllerBirthDay extends GetxController {
   final todays = RxList<BirthdayItem>([]);
   final upcomings = RxList<BirthdayItem>([]);
   final allFriends = RxList<BirthdayItem>([]);
   final filteredFriends = RxList<BirthdayItem>([]);
   final searchController = TextEditingController();
-
 
   @override
   void onInit() {
@@ -78,15 +76,20 @@ class ControllerBirthDay extends GetxController {
         final List<dynamic> data = jsonDecode(response.body);
         print("✅ Parsed Data Count: ${data.length}");
 
-        final List<BirthdayItem> friends = data.map((item) {
-          final id = item['id']; // ← Get ID
-          final name = item['name'] ?? '';
-          final birthday = item['birthday'] ?? '';
-          final image = 'https://avatar.iran.liara.run/public';
+        final List<BirthdayItem> friends =
+            data.map((item) {
+              final id = item['id']; // ← Get ID
+              final name = item['name'] ?? '';
+              final birthday = item['birthday'] ?? '';
+              final image = 'https://avatar.iran.liara.run/public';
 
-          return BirthdayItem(id: id, name: name, birthday: birthday, image: image);
-        }).toList();
-
+              return BirthdayItem(
+                id: id,
+                name: name,
+                birthday: birthday,
+                image: image,
+              );
+            }).toList();
 
         groupBirthDayList(friends);
       } else {
@@ -126,7 +129,6 @@ class ControllerBirthDay extends GetxController {
       print("🔥 Exception: $e");
     }
   }
-
 
   void groupBirthDayList(List<BirthdayItem> allBirthdays) {
     final now = DateTime.now();

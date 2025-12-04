@@ -12,12 +12,27 @@ class ScreenChat extends GetView<ControllerHome> {
     final int? chatId = arguments['id'];
     final String chatTitle = arguments['title'] ?? "Ai";
 
-    // Call API when the widget builds
+    final ScrollController scrollController = ScrollController();
+
+    // Fetch messages once after screen builds
     if (chatId != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.loadChatMessages(chatId);
       });
     }
+
+    // ✅ Auto-scroll when new messages are added
+    ever(controller.chatMessages, (_) {
+      if (scrollController.hasClients) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          scrollController.animateTo(
+            scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        });
+      }
+    });
 
     return Scaffold(
       appBar: ChildPageAppBar(title: chatTitle),
@@ -28,6 +43,7 @@ class ScreenChat extends GetView<ControllerHome> {
             Expanded(
               child: Obx(
                 () => ListView.separated(
+                  controller: scrollController, // attach controller ✅
                   padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.w),
                   itemCount: controller.chatMessages.length,
                   itemBuilder: (context, index) {

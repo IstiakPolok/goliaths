@@ -11,6 +11,7 @@ class ScreenHome extends StatefulWidget {
 }
 
 class _ScreenHomeState extends State<ScreenHome> {
+  
   final List<String> dailyQuotes = [
     "You were not created to struggle endlessly; peace is part of your design.",
     "With every difficulty, there is the seed of ease — maybe more than once.",
@@ -80,7 +81,7 @@ class _ScreenHomeState extends State<ScreenHome> {
 
     final historyController = Get.put(ControllerHistory());
     final controllerHome = Get.put(ControllerHome());
-    final profilecontroller = Get.put(ProfileController());
+   // final profilecontroller = Get.put(ProfileController());
     final cardDecoration = BoxDecoration(
       color: Color(0xFF222222),
       borderRadius: BorderRadius.circular(26.r),

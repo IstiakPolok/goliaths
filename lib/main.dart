@@ -1,7 +1,9 @@
+import 'package:Goliaths/network_caller/internet_controller.dart';
 import 'package:Goliaths/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 /* TODO: todos
 * image_picker ios setup
@@ -9,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 * */
 void main() async {
   await ScreenUtil.ensureScreenSize();
+  Get.put(InternetController());
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // FULLY transparent

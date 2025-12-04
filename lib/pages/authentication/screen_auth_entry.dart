@@ -80,7 +80,7 @@ class _ScreenAuthEntryState extends State<ScreenAuthEntry> {
 
                     6.verticalSpace,
                     Text(
-                      "We are the best solution for your daily life and best solution for your daily life",
+                      "Provides daily reminders and motivational suggestions to support your well-being.",
                       style: goliathsTypography.screenText.copyWith(
                         color: goliathsTheme.textOnPrimary.withValues(
                           alpha: 0.8,
@@ -100,7 +100,7 @@ class _ScreenAuthEntryState extends State<ScreenAuthEntry> {
                           child: CustomElevatedButton(
                             text: "Register",
                             onPressed: () {
-                              Get.offNamed(AppRoutes.register);
+                              Get.toNamed(AppRoutes.register);
                             },
                             backgroundColor: goliathsTheme.background,
                           ),
@@ -111,7 +111,7 @@ class _ScreenAuthEntryState extends State<ScreenAuthEntry> {
                           child: CustomElevatedButton(
                             text: "Login",
                             onPressed: () {
-                              Get.offNamed(AppRoutes.login);
+                              Get.toNamed(AppRoutes.login);
                             },
                           ),
                         ),
@@ -120,11 +120,14 @@ class _ScreenAuthEntryState extends State<ScreenAuthEntry> {
                     ),
                     24.verticalSpace,
                     // Terms and Privacy =======================================
-                    TermsAndPrivacyText(privacyClick: () {
-                      Get.toNamed(AppRoutes.privacy);
-                    }, termClick: () {
-                      Get.toNamed(AppRoutes.terms);
-                    }),
+                    TermsAndPrivacyText(
+                      privacyClick: () {
+                        Get.toNamed(AppRoutes.privacy);
+                      },
+                      termClick: () {
+                        Get.toNamed(AppRoutes.terms);
+                      },
+                    ),
                   ],
                 ),
               ),

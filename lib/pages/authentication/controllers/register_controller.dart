@@ -15,20 +15,20 @@ class RegisterController extends GetxController {
   var isLoading = false.obs;
 
   Future<void> registerUser() async {
-    final nameParts = fullNameController.text.trim().split(' ');
-    final firstName = nameParts.isNotEmpty ? nameParts[0] : '';
-    final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+    //final nameParts = fullNameController.text.trim().split(' ');
+    // final firstName = nameParts.isNotEmpty ? nameParts[0] : '';
+    // final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
 
     print("📝 Starting registration...");
     print("📧 Email: ${emailController.text.trim()}");
     print("🔑 Password: ${passwordController.text.trim()}");
     print("👤 Full Name: ${fullNameController.text.trim()}");
 
-    final registerBody = jsonEncode({
-      "email": emailController.text.trim(),
-      "password": passwordController.text.trim(),
-      "input_full_name": fullNameController.text.trim(), // ✅ use .text
-    });
+    // final registerBody = jsonEncode({
+    //   "email": emailController.text.trim(),
+    //   "password": passwordController.text.trim(),
+    //   "input_full_name": fullNameController.text.trim(), // ✅ use .text
+    // });
 
     if (passwordController.text != confirmPasswordController.text) {
       print("❌ Passwords do not match");
@@ -86,7 +86,7 @@ class RegisterController extends GetxController {
         print("✅ OTP response code: ${otpResponse.statusCode}");
         print("📨 OTP response body: ${otpResponse.body}");
 
-        final otpData = jsonDecode(otpResponse.body);
+        //final otpData = jsonDecode(otpResponse.body);
 
         if (registerResponse.statusCode == 200 ||
             registerResponse.statusCode == 201) {

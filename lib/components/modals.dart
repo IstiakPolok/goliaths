@@ -520,14 +520,23 @@ class _ModalFriendBirthDateState extends State<ModalFriendBirthDate> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.snackbar("Success", "Birthday added successfully");
-        Navigator.pop(context); // Close modal
+        Navigator.pop(context);
       } else {
-        Get.snackbar("Error", "Failed to save birthday");
+        final decoded = jsonDecode(response.body);
+
+        // Safely extract message
+        String errorMessage = "Something went wrong";
+        if (decoded is Map && decoded.containsKey("relation")) {
+          errorMessage = decoded["relation"][0];
+        } else if (decoded.containsKey("detail")) {
+          errorMessage = decoded["detail"];
+        }
+
+        Get.snackbar("Error", errorMessage);
         print("❌ Response: ${response.statusCode} ${response.body}");
       }
     } catch (e) {
       Get.snackbar("Error", "Something went wrong");
       print("🔥 Exception: $e");
-    }
-  }
+    }  }
 }

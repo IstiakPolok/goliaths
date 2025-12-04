@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-import 'dart:math' as developer;
 
 import 'package:Goliaths/components/_components.dart';
 import 'package:Goliaths/model/_models.dart';
@@ -16,7 +13,6 @@ import 'package:Goliaths/pages/settings/controllers/birthdate_controller.dart';
 import 'package:Goliaths/routes.dart';
 import 'package:Goliaths/services_class/shared_preferences_helper.dart';
 import 'package:Goliaths/theme.dart';
-import 'package:awesome_calendart/awesome_calendart.dart';
 
 import 'package:country_names/country_list.dart';
 import 'package:flutter/foundation.dart';
@@ -24,20 +20,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:lunary/lunary.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import '../data/_data.dart';
+import '../network_caller/networkconfig.dart';
 import 'authentication/controllers/VerifyOtpController.dart';
 import 'authentication/controllers/login_controller.dart';
 import 'home/screen_webview.dart';

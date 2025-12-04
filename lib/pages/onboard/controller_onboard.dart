@@ -43,7 +43,7 @@ class ControllerOnboard extends GetxController {
 
   void selectAssistant(int? index) {
     // Save selected assistant and navigate
-    final selectedAssistant = assistants[index ?? currentPage.value];
+    //final selectedAssistant = assistants[index ?? currentPage.value];
     // You can store this in shared preferences or another persistent storage
   }
 }

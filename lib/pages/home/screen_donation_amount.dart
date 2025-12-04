@@ -80,8 +80,8 @@ class ScreenDonationAmount extends GetView<ControllerDonation> {
     required int commentsCount,
     required VoidCallback onDonatePressed,
   }) {
-    final percentage =
-        ((raisedAmount / goalAmount) * 100).clamp(0, 100).toInt();
+    // final percentage =
+    //     ((raisedAmount / goalAmount) * 100).clamp(0, 100).toInt();
 
     return Container(
       padding: const EdgeInsets.all(16),

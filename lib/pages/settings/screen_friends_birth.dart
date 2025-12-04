@@ -57,9 +57,9 @@ class _ScreenFriendsBirthState extends State<ScreenFriendsBirth> {
                   return SliverList(
                     delegate: SliverChildListDelegate([
                       SectionHeader(sectionTitle: "Search Results"),
-                      ...controller.filteredFriends
-                          .map((item) => BirthdayItemWidget(item: item))
-                          ,
+                      ...controller.filteredFriends.map(
+                        (item) => BirthdayItemWidget(item: item),
+                      ),
                       28.verticalSpace,
                     ]),
                   );
@@ -68,23 +68,23 @@ class _ScreenFriendsBirthState extends State<ScreenFriendsBirth> {
                     delegate: SliverChildListDelegate([
                       if (controller.todays.isNotEmpty) ...[
                         SectionHeader(sectionTitle: "Birthdays Today"),
-                        ...controller.todays
-                            .map((item) => BirthdayItemWidget(item: item))
-                            ,
+                        ...controller.todays.map(
+                          (item) => BirthdayItemWidget(item: item),
+                        ),
                         12.verticalSpace,
                       ],
                       if (controller.upcomings.isNotEmpty) ...[
                         SectionHeader(sectionTitle: "Upcoming Birthdays"),
-                        ...controller.upcomings
-                            .map((item) => BirthdayItemWidget(item: item))
-                            ,
+                        ...controller.upcomings.map(
+                          (item) => BirthdayItemWidget(item: item),
+                        ),
                         12.verticalSpace,
                       ],
                       if (controller.filteredFriends.isNotEmpty) ...[
                         SectionHeader(sectionTitle: "All Friends"),
-                        ...controller.filteredFriends
-                            .map((item) => BirthdayItemWidget(item: item))
-                            ,
+                        ...controller.filteredFriends.map(
+                          (item) => BirthdayItemWidget(item: item),
+                        ),
                         28.verticalSpace,
                       ],
                     ]),
@@ -180,7 +180,8 @@ class BirthdayItemWidget extends StatelessWidget {
         onLongPress: () {
           Get.defaultDialog(
             title: "Delete",
-            middleText: "Are you sure you want to delete ${item.name}'s birthday?",
+            middleText:
+                "Are you sure you want to delete ${item.name}'s birthday?",
             textConfirm: "Delete",
             textCancel: "Cancel",
             confirmTextColor: Colors.white,
@@ -207,7 +208,7 @@ class BirthdayItemWidget extends StatelessWidget {
                     textAlign: TextAlign.start,
                   ),
                   Text(
-                      "Birthday: ${item.formattedDate}",
+                    "Birthday: ${item.formattedDate}",
                     style: goliathsTypography.screenText.copyWith(
                       color: goliathsTheme.text.withValues(alpha: 0.8),
                       fontSize: 13.sp,
@@ -220,7 +221,8 @@ class BirthdayItemWidget extends StatelessWidget {
             16.horizontalSpace,
             GestureDetector(
               onTap: () {
-                final message = "Hey ${item.name}, wishing you a very Happy Birthday! 🎉🎂";
+                final message =
+                    "Hey ${item.name}, wishing you a very Happy Birthday! 🎉🎂";
                 Share.share(message);
               },
               child: SvgPicture.asset(
@@ -229,11 +231,9 @@ class BirthdayItemWidget extends StatelessWidget {
                 width: 20.h,
               ),
             ),
-
           ],
         ),
       ),
-
     );
   }
 }
